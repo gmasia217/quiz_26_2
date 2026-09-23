@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Basic Pharmacy Practice</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="기초약무 퀴즈">
+<meta name="theme-color" content="#0d6efd">
+<link rel="manifest" id="manifest">
+<script>
+    const manifest = {
+        "name": "기초약무실습 퀴즈",
+        "short_name": "기초약무 퀴즈",
+        "display": "standalone",
+        "start_url": ".",
+        "background_color": "#f8f9fa",
+        "theme_color": "#0d6efd",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230d6efd'/%3E%3Ctext x='50' y='65' font-size='50' fill='white' text-anchor='middle'%3E🏥%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192",
+            "type": "image/svg+xml"
+        }]
+    };
+    document.getElementById('manifest').href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
+</script>
+
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        margin: 0;
+        background-color: #f8f9fa;
+        color: #333;
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+        user-select: none; 
+        -webkit-user-select: none;
+    }
+
+    .sidebar {
+        width: 280px;
+        background-color: #f1f3f5;
+        border-right: 1px solid #dee2e6;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        flex-shrink: 0;
+        display: none; 
+    }
+    .sidebar-header {
+        padding: 15px;
+        background-color: #e9ecef;
+        font-weight: bold;
+        color: #0d6efd;
+        border-bottom: 1px solid #dee2e6;
+    }
+    .header-buttons {
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
+    .action-btn {
+        background: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 6px 10px;
+        font-size: 12px;
+        cursor: pointer;
+        color: #495057;
+        flex-grow: 1;
+        text-align: center;
+        box-sizing: border-box;
+    }
+    .action-btn.full-width { flex-basis: 100%; }
+    .action-btn:hover { background: #e9ecef; }
+    
+    .nav-grid-container {
+        padding: 15px;
+        overflow-y: auto;
+        flex-grow: 1;
+    }
+    .nav-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 5px;
+    }
+    .nav-btn {
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        padding: 8px 0;
+        text-align: center;
+        cursor: pointer;
+        font-size: 14px;
+        position: relative;
+    }
+    .nav-btn.answered { background: linear-gradient(to bottom, #fff 50%, #adb5bd 50%); }
+    .nav-btn.active { border: 2px solid #000; font-weight: bold; }
+    .nav-btn.flagged::after {
+        content: ''; position: absolute; top: 0; right: 0;
+        border-width: 0 10px 10px 0; border-style: solid; border-color: transparent red transparent transparent;
+    }
+    .sidebar-footer { padding: 15px; border-top: 1px solid #dee2e6; }
+    .submit-link { color: #0d6efd; text-decoration: none; cursor: pointer; }
+    .submit-link:hover { text-decoration: underline; }
+
+    .main-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow-y: auto;
+    }
+    
+    #dashboard-container {
+        padding: 30px;
+        max-width: 1000px;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .quiz-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .quiz-card {
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s;
+    }
+    .quiz-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .quiz-card h3 { margin: 0 0 10px 0; font-size: 18px; color: #0d6efd; }
+    .quiz-card p { margin: 0 0 20px 0; color: #6c757d; font-size: 14px; }
+
+    .breadcrumb {
+        padding: 15px 30px;
+        background-color: #fff;
+        border-bottom: 1px solid #dee2e6;
+        color: #6c757d;
+        font-size: 14px;
+    }
+    .breadcrumb a { text-decoration: none; color: inherit; }
+    .breadcrumb a:hover { text-decoration: underline; color: #0d6efd; }
+    .breadcrumb-link {
+        cursor: pointer;
+        color: #0d6efd;
+    }
+    .breadcrumb-link:hover { text-decoration: underline; }
+    
+    #quiz-container {
+        padding: 30px;
+        max-width: 900px;
+        user-select: text; 
+        -webkit-user-select: text;
+        display: none; 
+    }
+    .question-layout { display: flex; gap: 20px; margin-bottom: 20px; }
+    .info-box {
+        width: 130px; background-color: #f8f9fa; border: 1px solid #dee2e6;
+        padding: 15px; font-size: 13px; height: fit-content;
+    }
+    .info-box h3 { margin: 0 0 10px 0; font-size: 16px; }
+    .flag-btn {
+        color: #212529; background: none; border: none; padding: 0;
+        cursor: pointer; margin-top: 15px; text-decoration: none; display: flex; align-items: center; gap: 5px;
+    }
+    .flag-btn:hover { text-decoration: underline; }
+    
+    .question-box {
+        flex-grow: 1; background-color: #f0f7ff; border: 1px solid #cce1ff;
+        padding: 20px; border-radius: 4px;
+    }
+    .guideline-text { font-weight: bold; margin-bottom: 15px; font-size: 14px; color: #0d6efd; }
+    .question-text { font-size: 15px; margin-bottom: 20px; line-height: 1.5; }
+    
+    .essay-input {
+        width: 100%; height: 120px; padding: 15px; border: 1px solid #ced4da;
+        border-radius: 4px; font-size: 15px; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.5;
+    }
+    .essay-input:focus { outline: none; border-color: #0d6efd; box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); }
+    .clear-choice { display: inline-block; margin-top: 15px; color: #0d6efd; cursor: pointer; font-size: 14px; }
+    .clear-choice:hover { text-decoration: underline; }
+    .nav-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    
+    .btn { padding: 8px 16px; border: 1px solid #ced4da; background-color: #fff; cursor: pointer; border-radius: 4px; font-size: 14px; }
+    .btn-primary { background-color: #0d6efd; color: white; border-color: #0d6efd; }
+    .btn-primary:hover { background-color: #0a58ca; }
+    .btn-danger { background-color: #dc3545; color: white; border-color: #dc3545; }
+    .btn-danger:hover { background-color: #bb2d3b; }
+
+    #results-container {
+        padding: 30px; max-width: 900px; display: none; user-select: text; -webkit-user-select: text;
+    }
+    .result-item { background-color: #fff; border: 1px solid #dee2e6; border-radius: 4px; padding: 20px; margin-bottom: 15px; }
+    .result-item.correct { border-left: 5px solid #0d6efd; }
+    .result-item.incorrect { border-left: 5px solid #dc3545; }
+    .status-badge { font-weight: bold; margin-bottom: 10px; display: inline-block; }
+    .status-correct { color: #0d6efd; }
+    .status-incorrect { color: #dc3545; }
+
+    @media (max-width: 768px) {
+        body { flex-direction: column; overflow: auto; height: auto; }
+        .sidebar { width: 100%; height: auto; order: 2; border-right: none; border-top: 2px solid #dee2e6; }
+        .main-content { order: 1; overflow-y: visible; }
+        #quiz-container, #results-container, #dashboard-container { padding: 15px; padding-bottom: 100px; }
+        .question-layout { flex-direction: column; gap: 10px; }
+        .info-box { width: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 15px; padding: 10px 15px; }
+        .info-box h3 { margin: 0; }
+        #q-status-display { margin-bottom: 0 !important; }
+        .flag-btn { margin-top: 0; }
+        .breadcrumb { padding: 10px 15px; font-size: 12px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="app-sidebar">
+    <div class="sidebar-header">
+        <div>Quiz navigation</div>
+        <div class="header-buttons">
+            <button class="action-btn full-width" onclick="shuffleQuiz()">🔀 문제 섞기</button>
+            <button class="action-btn full-width" onclick="resetOrder()">🔄 원래 순서로</button>
+        </div>
+    </div>
+    <div class="nav-grid-container">
+        <div class="nav-grid" id="nav-grid"></div>
+    </div>
+    <div class="sidebar-footer">
+        <a class="submit-link" onclick="showResults()">Finish attempt ...</a>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="breadcrumb">
+        <a href="../index.html">🏠 홈</a> / <span class="breadcrumb-link" onclick="showDashboard()">기초약무실습</span> / <span id="breadcrumb-current">퀴즈 목록</span>
+        <span id="mode-indicator" style="font-weight:bold; color:#0d6efd; margin-left:10px; display:none;">[서술형 퀴즈]</span>
+    </div>
+
+    <div id="dashboard-container">
+        <h2>기초약무실습 퀴즈 목록</h2>
+        <div class="quiz-grid" id="quiz-grid"></div>
+    </div>
+    
+    <div id="quiz-container">
+        <div class="question-layout">
+            <div class="info-box">
+                <h3 id="q-number-display">Question 1</h3>
+                <div id="q-status-display" style="color: #6c757d; margin-bottom: 10px;">Not yet answered</div>
+                <div>Marked out of 1.00</div>
+                <button class="flag-btn" onclick="toggleFlag()" id="flag-btn-display">🚩 Flag question</button>
+            </div>
+            <div class="question-box">
+                <div class="guideline-text" id="guideline-display"></div>
+                <div class="question-text" id="q-text-display">Question text goes here</div>
+                <div id="options-container"></div>
+                <div class="clear-choice" onclick="clearChoice()">Clear my choice / 입력 지우기</div>
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" id="prev-btn" onclick="changeQuestion(-1)">Previous page</button>
+            <button class="btn btn-primary" id="next-btn" onclick="changeQuestion(1)">Next page</button>
+        </div>
+    </div>
+
+    <div id="results-container">
+        <h2>퀴즈 결과</h2>
+        <div style="margin-bottom: 10px;">
+            <span id="score-display" style="font-size: 18px; font-weight: bold;"></span>
+        </div>
+        <div id="essay-warning" style="color: #dc3545; font-size: 14px; margin-bottom: 20px; font-weight: bold;">
+            * 서술형 모드에서는 띄어쓰기나 대소문자, 단어 차이로 자동 오답 처리될 수 있습니다. 반드시 '모범 답안'과 눈으로 직접 비교해 보세요!
+        </div>
+        <div id="results-list"></div>
+        <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="resetOrder()">방금 푼 퀴즈 처음부터 다시 풀기</button>
+            <button class="btn btn-danger" id="retry-incorrect-btn" onclick="retryIncorrect()">❌ 틀린 문제만 다시 풀기</button>
+            <button class="btn" onclick="showDashboard()">목록으로 돌아가기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 전문의약품 적응증 정리 PDF 데이터 기반 생성
+    const drugData = [
+        ["gabapentin", "신경통"],
+        ["ganciclovir", "CMV 폐렴"],
+        ["gentamicin", "복막염"],
+        ["glimepiride", "2형 당뇨병"],
+        ["nafcillin", "감염성 심내막염"],
+        ["naloxone", "opioid 과다복용"],
+        ["nystatin", "candida감염 치료"],
+        ["nitroglycerin", "협심증"],
+        ["nifedipine", "고혈압"],
+        ["dabigatran", "deep vein thrombosis, pulmonary embolism 치료"],
+        ["daunorubicin", "AML(급성골수성백혈병), 신경아세포증"],
+        ["dapagliflozin", "2형 당뇨병"],
+        ["dexamethasone", "류마티스성관절염의 항염증제, 알러지반응"],
+        ["donepezil", "치매(알츠하이머병)"],
+        ["dobutamine", "심부전"],
+        ["docetaxel", "유방암, 폐암,등"],
+        ["dopamine", "심부전"],
+        ["Doxazosin", "혈압약"],
+        ["Doxorubicin", "(주로 유방암, Metastatic cancer)"],
+        ["Doxycycline", "항균제"],
+        ["Domperidone", "위장운동장애"],
+        ["Digoxin", "심부전"],
+        ["Diazepam", "불안증"],
+        ["Diclofenac", "통증, 편두통"],
+        ["Diltiazem", "고혈압"],
+        ["Lamotrigine", "항경련제"],
+        ["Lamivudine", "B형 간염, HIV 감염"],
+        ["Ramipril", "고혈압약"],
+        ["Lactulose", "변비"],
+        ["Lansoprazole", "소화성 궤양 치료제"],
+        ["Levenorgestrel", "피임약"],
+        ["Levodopa/ Carbidopa", "파킨슨병 치료제"],
+        ["levosulpiride", "위장운동 장애"],
+        ["levothyroxine", "갑상선 기능 저하증"],
+        ["levofloxacin", "각막염, 결막염 항균제"],
+        ["levetiracetam", "간질 치료제"],
+        ["letrozole", "유방암 항암제"],
+        ["lorazepam", "마취전/ 급성 불안, 흥분에 사용"],
+        ["losartan", "고혈압"],
+        ["rosuvastatin", "고지혈증"],
+        ["roxithromycin", "편도염, 기관지염 등 호흡기 감염증"],
+        ["linagliptin", "당뇨병 치료제"],
+        ["rivaroxaban", "정맥혈전증, 폐색전증 치료"],
+        ["ribavirin", "만성 C형 간염 치료제"],
+        ["risperidone", "정신분열증, 우울, 불안 완화"],
+        ["rituximab", "림프종, 만성구성 백혈병, 류마티스 관절염 치료제"],
+        ["lithium", "조울증"],
+        ["rifampicin", "항결핵제"],
+        ["Megestrol", "암.AIDS의한 식욕부진(식욕촉진제), 재발성, 전이성, 수술불가 유방암, 자궁내막암 완화"],
+        ["Meropenem", "(폐혈증, 호흡기감염, 요로감염증, 복막염 등의) 항균제"],
+        ["Methylprednisolone", "습진, 아토피피부염"],
+        ["Metoclopramide", "진토제"],
+        ["Methotrexate", "급성백혈병, 비호지킨림프종 등 항암제"],
+        ["Metronidazole", "(패혈증, 균혈증 등) 혐기성 감염증 항균제, (세균질염 등) 항진균제"],
+        ["Metformin", "당뇨병 (경구용 혈당강하제)"],
+        ["Methimazole", "갑상선항진증"],
+        ["Methylphenidate", "ADHD (주의력결핍과잉행동장애)"],
+        ["Mefenamic acid", "진통제(두통, 치통, 요통, 골관절염, 월경통 등)"],
+        ["Immunoglobulin", "저 및 무감마글로불린혈증, 중증감염증(항생물질병용)"],
+        ["Morphine", "마약성 진통제"],
+        ["Moxifloxacin", "호흡기감염(급성부비동염, 폐렴), 합병 복강내 감염 항균제"],
+        ["Montelukast", "천식, 알레르기비염"],
+        ["Midazolam", "수면장애, 진정 목적"],
+        ["Mycophenolate", "이식환자 급성장기 '이식거부반응 방지'"],
+        ["Baclofen", "근육이완제"],
+        ["Vancomycin", "항균제 (위막성장염, PMC)"],
+        ["Valsartan", "고혈압제"],
+        ["Valproic acid", "항경련제"],
+        ["Verapamil", "고혈압, 협심증 치료제"],
+        ["Betamethasone", "항염증제, 아토피성/접촉성 피부염"],
+        ["Budesonide", "천식, 크론병, 궤양성 대장염"],
+        ["Bicalutamide", "항암제"],
+        ["Cyclosporine", "장기이식거부반응, 류마티스 관절염"],
+        ["Salmeterol", "천식, COPD"],
+        ["Salbutamol", "천식, COPD"],
+        ["Sulfasalazine", "염증성 장질환, 류마티스 관절염"],
+        ["Celecoxib", "소염진통제"],
+        ["Cefazolin", "담즙관염의 항균제"],
+        ["Cefaclor", "호흡기 감염, 위장관 감염의 항균제"],
+        ["Cefepime", "복부내 감염, 폐렴의 항균제"],
+        ["Cefotaxime", "뇌수막염, 호흡기 감염, 방광염, 위장관 감염"],
+        ["Cefuroxime", "방광염"],
+        ["Ceftriaxone", "뇌수막염, 호흡기 감염, 방광염, 위장관 감염"],
+        ["Sumatriptan", "편두통 치료제"],
+        ["Sucralfate", "소화성 궤양 치료제"],
+        ["Pseudoephedrine", "코감기"],
+        ["Streptokinase- streptodornase", "수술 및 외상 후 염증 완화, 부비동염, 혈정정맥염"],
+        ["Spironolactone", "고혈압"],
+        ["Cimetidine", "소화성궤양치료제"],
+        ["Cisplatin", "위암, 폐암, 고환/전립선/난소/방광/자궁경부암"],
+        ["Cyclophosphamide", "유방암"],
+        ["Ciprofloxacin", "호흡기 감염, 위장관 감염, 방광염"],
+        ["Sildenafil", "발기부전 치료제"],
+        ["Simvastatin", "고지혈증 치료제"],
+        ["Amantadine", "파킨슨병 치료제"],
+        ["Amoxicillin", "생식기감염, 폐렴"],
+        ["Amiodarone", "부정맥치료제"],
+        ["Amikacin sulfate", "폐렴, 폐혈증, 복막염, 수막염, 요로감염 등 감염질환"],
+        ["Amitriptyline", "우울증 치료제, 야뇨증"],
+        ["Aceclofenac", "관절염, 척추염, 수술 후 통증, 요통 등"],
+        ["Acyclovir", "생식기포진, 대상포진, 단순포진성 뇌염"],
+        ["Azathioprine", "장기이식 후 감염예방, 자가면역질환"],
+        ["Azithromycin", "호흡기감염, 중이염, 피부감염, 생식기감염"],
+        ["Acarbose", "당뇨약"],
+        ["Atenolol", "고혈압"],
+        ["Atrovastatin", "고지혈증"],
+        ["Atropine", "해독제, 진경제, 산동약"],
+        ["Afloqualone", "마비, 다발성경화증 치료제"],
+        ["Alendronate", "골다공증치료제"],
+        ["Allopurinol", "통풍치료제"],
+        ["Alverine", "과민성대장증후군 치료제"],
+        ["Albumin", "저단백혈증, 혈액대용제 및 혈장단백질 분획제"],
+        ["Alfuzosin", "전립선 비대증 치료제, 배뇨장애 치료제"],
+        ["Alprazolam", "항불안제, 우울증, 수면장애, 공황장애 (수면진통제, 신경안정제)"],
+        ["Amlodipine", "고혈압"],
+        ["Amphotericin B", "심각한 진균증, 리슈만편모충증"],
+        ["Ampicillin", "호흡기 감염증, UTI(요로기관감염증), 뇌수막염"],
+        ["Enalapril", "고혈압"],
+        ["Enoxaparin", "DVT(deep vein thrombosis), PE(pulmonary embolism)"],
+        ["Erythropoietin", "빈혈치료제"],
+        ["Ebastine", "비염, 알레르기"],
+        ["Esomeprazole", "소화성궤양치료제"],
+        ["Escitalopram", "항우울제"],
+        ["Ethambutol", "항결핵제"],
+        ["Epinephrine", "알러지성 과민반응, 저혈압/쇼크"],
+        ["Entacapone", "파킨슨병 치료제"],
+        ["Entecavir", "B형 간염"],
+        ["Omeprazole", "소화성궤양 치료제"],
+        ["Oxybutynin", "과민성 방광 치료제"],
+        ["Oxycodone", "마약성 진통제"],
+        ["Oxytocin", "자궁수축제 (자궁 수축 유발, 자궁 출혈 치료)"],
+        ["Octreotide", "말단비대증 치료"],
+        ["Ondansetron", "진토제(구토 예방 및 치료)"],
+        ["Olanzapine", "비정형 항정신병약 (정신분열병, 양극성장애)"],
+        ["Warfarin", "정맥혈전증, 색전성 심방세동, 폐동맥색전증, 관상동맥페색"],
+        ["Imatinib", "표적치료 항암제 (만성골수성백혈병=CML)"],
+        ["Imipenem / cilastatin", "기관지염, 폐렴, 방광염, 담낭염, 자궁내감염, 패혈증 등"],
+        ["Isoniazide", "결핵"],
+        ["Isosorbide 5-mononitrate", "관상동맥심질환, 협심증의 흉통, 심근경색, 만성심근기능부전"],
+        ["Isosorbide dinitrate", "급성 심부전, 불안정형 협심증"],
+        ["Isotretinoin", "여드름 치료제"],
+        ["Acitretin", "건선 치료제"],
+        ["Itraconazole", "칸디다성 질염, 피부사상균증, 진균성 각막염, 구강 칸디다증"],
+        ["Ifosfamide", "항암제"],
+        ["Ipratropium", "기도폐쇄 장애에 의한 호흡곤란 증상 완화"],
+        ["Insulin", "당뇨병약"],
+        ["Zolpidem", "수면제"],
+        ["carbamazepine", "(간질, 삼차 신경통의) 항경련제"],
+        ["carvedilol", "고혈압, 협심증 치료제"],
+        ["carboplatin", "(주로 난소암, 소세포폐암의) 항암제"],
+        ["capecitabine", "(주로 결장직장암, 유방암, 위암의) 항암제"],
+        ["calcitriole", "(경구, 주사제-신기능 저하 환자의 골질환치료, 부갑상선 기능이상 치료) (외용제-건선 치료제) 비타민D제제"],
+        ["captopril", "고혈압"],
+        ["ketorolac", "진통제"],
+        ["codeine", "마약성 진통제, 진해제"],
+        ["colchicine", "통풍 치료제"],
+        ["quetiapine", "(정신분열증의) 비정형 항정신병약"],
+        ["clarithromycin", "(상하기도감염, 피부감염 등의) 항균제"],
+        ["clonazepam", "(간질의) 항경련제, BZD계 수면진통제 및 신경안정제"],
+        ["clozapine", "(정신분열증의) 비정형 항정신병약"],
+        ["clopidogrel", "항혈전제, 혈소판응집억제제"],
+        ["clindamycin", "항균제"],
+        ["tamoxifen", "(유방암의) 호르몬성 항암제"],
+        ["tacrolimus", "(장기이식거부반응) 면역억제제"],
+        ["tamsulosin", "양성 전립선 비대증"],
+        ["theophylline", "기관지 확장제"],
+        ["tobramycin", "항균제"],
+        ["tramadol", "중추성 진통제"],
+        ["trastuzumab", "표적치료 항암제"],
+        ["tiotropium", "기관지 확장제"],
+        ["ticagrelor", "심근경색, 뇌졸중, 혈소판응집억제제"],
+        ["paroxetine", "항우울, 항불안제"],
+        ["famotidine", "소화성궤양치료제"],
+        ["paclitaxel", "항암제"],
+        ["pantoprazole", "소화성궤양치료제"],
+        ["phenobarbital", "항경련제"],
+        ["phenytoin", "항경련제"],
+        ["pethidine", "마약성 진통제"],
+        ["fentanyl", "마약성 진통제, 전신마취제"],
+        ["formoterol", "기관지 확장제"],
+        ["furosemide", "고혈압약"],
+        ["prasugrel", "(불안정형 협심증 환자, STEMI환자의 항혈전제) 혈소판응집억제제"],
+        ["pregabalin", "부분 발작 보조제"],
+        ["prednisolone", "항염증제, 면역억제제"],
+        ["propofol", "정맥 마취제"],
+        ["propranolol", "고혈압, 협심증, 부정맥 치료제"],
+        ["flumazenil", "벤조다이아제핀계 약물의 중추진정작용 역전"],
+        ["fluorometholone", "항염증제"],
+        ["fluorouracil", "세포독성 항암제"],
+        ["fluoxetine", "우울증, 월경전 불쾌장애"],
+        ["fluconazole", "항진균제"],
+        ["finasteride", "양성 전립선 비대증, 탈모치료제"],
+        ["pyrazinamide", "항결핵제"],
+        ["piperacillin/tazobactam", "(폐렴, 복막염 등의) 항균제"],
+        ["pioglitazone", "당뇨병약"],
+        ["hydroxyzine", "알러지약"],
+        ["heparin", "폐색전증, 심부정맥 혈전증(DVT) 등에 쓰이는 항응고제"],
+        ["hydrochlorothiazide", "고혈압약"]
+    ];
+
+    const rawStudentData = drugData.map((item, index) => {
+        return { 
+            guideline: "[전문의약품 적응증 암기]", 
+            text: `${index + 1}. 다음 약물의 임상용도를 쓰시오: <br><br><span style="font-size:20px; font-weight:bold; color:#d63384;">${item[0]}</span>`, 
+            options: [item[1]], 
+            answer: 0, 
+            type: "essay" 
+        };
+    });
+
+    const quizLibrary = [
+        {
+            id: 'drug_indication_quiz',
+            title: '전문의약품 적응증 전체 퀴즈 (198개)',
+            data: rawStudentData
+        }
+    ];
+
+    let currentOriginalData = []; 
+    let activeQuizData = [];      
+    let currentQuestion = 0;
+    let userAnswers = [];
+    let flaggedQuestions = [];
+
+    function showDashboard() {
+        document.getElementById('dashboard-container').style.display = 'block';
+        document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('results-container').style.display = 'none';
+        document.getElementById('app-sidebar').style.display = 'none';
+        document.getElementById('breadcrumb-current').innerText = '퀴즈 목록';
+        document.getElementById('mode-indicator').style.display = 'none';
+
+        const grid = document.getElementById('quiz-grid');
+        grid.innerHTML = '';
+        
+        quizLibrary.forEach(quiz => {
+            const card = document.createElement('div');
+            card.className = 'quiz-card';
+            card.innerHTML = `
+                <h3>${quiz.title}</h3>
+                <p>총 ${quiz.data.length}문항 (전체 서술형)</p>
+                <button class="btn btn-primary" onclick="startQuiz('${quiz.id}')">이 퀴즈 풀기</button>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function startQuiz(quizId) {
+        const selectedQuiz = quizLibrary.find(q => q.id === quizId);
+        currentOriginalData = selectedQuiz.data;
+        activeQuizData = JSON.parse(JSON.stringify(currentOriginalData));
+        
+        document.getElementById('breadcrumb-current').innerText = selectedQuiz.title;
+        document.getElementById('mode-indicator').style.display = 'inline';
+        document.getElementById('dashboard-container').style.display = 'none';
+        document.getElementById('results-container').style.display = 'none';
+        document.getElementById('quiz-container').style.display = 'block';
+        document.getElementById('app-sidebar').style.display = 'flex';
+        
+        resetQuizState();
+        init();
+    }
+
+    function resetQuizState() {
+        currentQuestion = 0;
+        userAnswers = new Array(activeQuizData.length).fill(null);
+        flaggedQuestions = new Array(activeQuizData.length).fill(false);
+    }
+
+    function shuffleQuiz() {
+        if (!confirm('문항 순서를 무작위로 섞으시겠습니까?')) return;
+        for (let i = activeQuizData.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [activeQuizData[i], activeQuizData[j]] = [activeQuizData[j], activeQuizData[i]];
+        }
+        resetQuizState();
+        init();
+    }
+
+    function resetOrder() {
+        activeQuizData = JSON.parse(JSON.stringify(currentOriginalData));
+        resetQuizState();
+        document.getElementById('results-container').style.display = 'none';
+        document.getElementById('quiz-container').style.display = 'block';
+        document.getElementById('app-sidebar').style.display = 'flex';
+        init();
+    }
+
+    function init() {
+        renderNavGrid();
+        renderQuestion(currentQuestion);
+    }
+
+    function renderNavGrid() {
+        const grid = document.getElementById('nav-grid');
+        grid.innerHTML = '';
+        for (let i = 0; i < activeQuizData.length; i++) {
+            const btn = document.createElement('div');
+            btn.className = 'nav-btn';
+            if (i === currentQuestion) btn.classList.add('active');
+            if (userAnswers[i] !== null && userAnswers[i] !== '') btn.classList.add('answered');
+            if (flaggedQuestions[i]) btn.classList.add('flagged');
+            btn.innerText = i + 1;
+            btn.onclick = () => { currentQuestion = i; renderQuestion(currentQuestion); };
+            grid.appendChild(btn);
+        }
+    }
+
+    function renderQuestion(index) {
+        const q = activeQuizData[index];
+        document.getElementById('q-number-display').innerText = `Question ${index + 1}`;
+        const hasAns = userAnswers[index] !== null && userAnswers[index] !== '';
+        document.getElementById('q-status-display').innerText = hasAns ? 'Complete' : 'Not yet answered';
+        document.getElementById('flag-btn-display').innerHTML = flaggedQuestions[index] ? '🚩 Remove flag' : '🚩 Flag question';
+        
+        let guidelineText = q.guideline || '';
+        document.getElementById('guideline-display').innerHTML = guidelineText;
+        document.getElementById('q-text-display').innerHTML = q.text;
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        
+        const area = document.createElement('textarea');
+        area.className = 'essay-input';
+        area.placeholder = '박스 안에 적응증을 입력하세요...';
+        area.value = userAnswers[index] || '';
+        area.oninput = (e) => {
+            userAnswers[currentQuestion] = e.target.value.trim() || null;
+            renderNavGrid();
+        };
+        container.appendChild(area);
+        
+        document.getElementById('prev-btn').style.visibility = index === 0 ? 'hidden' : 'visible';
+        const next = document.getElementById('next-btn');
+        next.innerText = index === activeQuizData.length - 1 ? 'Finish attempt ...' : 'Next page';
+        next.onclick = index === activeQuizData.length - 1 ? showResults : () => { currentQuestion++; renderQuestion(currentQuestion); };
+    }
+
+    function clearChoice() { userAnswers[currentQuestion] = null; renderQuestion(currentQuestion); }
+    function changeQuestion(s) { currentQuestion += s; renderQuestion(currentQuestion); }
+    function toggleFlag() { flaggedQuestions[currentQuestion] = !flaggedQuestions[currentQuestion]; renderQuestion(currentQuestion); }
+
+    function retryIncorrect() {
+        const incorrect = activeQuizData.filter((q, i) => {
+            const u = (userAnswers[i] || '').toLowerCase().replace(/\s+/g, '');
+            const c = q.options[q.answer].toLowerCase().replace(/\s+/g, '');
+            return u !== c;
+        });
+        if (incorrect.length === 0) return alert('모두 정답입니다!');
+        activeQuizData = incorrect;
+        resetQuizState();
+        document.getElementById('results-container').style.display = 'none';
+        document.getElementById('quiz-container').style.display = 'block';
+        document.getElementById('app-sidebar').style.display = 'flex';
+        init();
+    }
+
+    function showResults() {
+        if (!confirm('제출하시겠습니까?')) return;
+        document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('app-sidebar').style.display = 'none';
+        document.getElementById('results-container').style.display = 'block';
+        
+        const list = document.getElementById('results-list');
+        list.innerHTML = '';
+        let score = 0;
+
+        activeQuizData.forEach((q, i) => {
+            let correct = false;
+            let uText = '응답 안 함';
+            const cText = q.options[q.answer];
+            
+            const u = (userAnswers[i] || '').toLowerCase().replace(/\s+/g, '');
+            const c = cText.toLowerCase().replace(/\s+/g, '');
+            correct = u !== '' && u === c;
+            uText = userAnswers[i] || '응답 안 함';
+            uText = uText.replace(/\n/g, '<br>');
+            
+            if (correct) score++;
+            
+            const item = document.createElement('div');
+            item.className = `result-item ${correct ? 'correct' : 'incorrect'}`;
+            
+            let statusHTML = `<span class="status-badge ${correct?'status-correct':'status-incorrect'}">${correct?'✔ 완전 일치':'✘ 직접 확인 필요 (불일치)'}</span>`;
+
+            item.innerHTML = `
+                ${statusHTML}
+                <div style="font-size:14px; color:#0d6efd;">${q.guideline || ''}</div>
+                <div style="font-weight:bold; margin:10px 0;">${q.text}</div>
+                <div style="color:#6c757d;">나의 답:<br> <span style="display:inline-block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #dee2e6; width:100%; box-sizing:border-box;">${uText}</span></div>
+                <div style="color:#0d6efd; font-weight:bold; margin-top:10px;">모범 답안:<br> <span style="display:inline-block; margin-top:5px; padding:10px; background:#f0f7ff; border:1px solid #cce1ff; width:100%; box-sizing:border-box; color:#333;">${cText.replace(/\n/g, '<br>')}</span></div>
+            `;
+            list.appendChild(item);
+        });
+        
+        document.getElementById('score-display').innerText = `${activeQuizData.length}문항 중 ${score}문항 시스템 자동 정답 처리 (${Math.round(score/activeQuizData.length*100)}%)`;
+        document.getElementById('retry-incorrect-btn').style.display = score === activeQuizData.length ? 'none' : 'inline-block';
+    }
+
+    // 초기 화면 자동 실행
+    showDashboard();
+</script>
+</body>
+</html>
