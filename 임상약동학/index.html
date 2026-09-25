@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Clinical Pharmacokinetics Quiz</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="임상약동학 퀴즈">
+<meta name="theme-color" content="#0d6efd">
+<link rel="manifest" id="manifest">
+<script>
+    const manifest = {
+        "name": "임상약동학 퀴즈",
+        "short_name": "임상약동학",
+        "display": "standalone",
+        "start_url": ".",
+        "background_color": "#f8f9fa",
+        "theme_color": "#0d6efd",
+        "icons": [{
+            "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230d6efd'/%3E%3Ctext x='50' y='65' font-size='50' fill='white' text-anchor='middle'%3E💊%3C/text%3E%3C/svg%3E",
+            "sizes": "192x192",
+            "type": "image/svg+xml"
+        }]
+    };
+    document.getElementById('manifest').href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifest));
+</script>
+
+<style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 0; background-color: #f8f9fa; color: #333; display: flex; height: 100vh; overflow: hidden; user-select: none; -webkit-user-select: none; }
+    .sidebar { width: 280px; background-color: #f1f3f5; border-right: 1px solid #dee2e6; display: flex; flex-direction: column; height: 100%; flex-shrink: 0; display: none; }
+    .sidebar-header { padding: 15px; background-color: #e9ecef; font-weight: bold; color: #0d6efd; border-bottom: 1px solid #dee2e6; }
+    .header-buttons { display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap; }
+    .action-btn { background: #fff; border: 1px solid #ced4da; border-radius: 4px; padding: 6px 10px; font-size: 12px; cursor: pointer; color: #495057; flex-grow: 1; text-align: center; box-sizing: border-box; }
+    .action-btn:hover { background: #e9ecef; }
+    .nav-grid-container { padding: 15px; overflow-y: auto; flex-grow: 1; }
+    .nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+    .nav-btn { background-color: #fff; border: 1px solid #ced4da; border-radius: 3px; padding: 8px 0; text-align: center; cursor: pointer; font-size: 14px; position: relative; }
+    .nav-btn.answered { background: linear-gradient(to bottom, #fff 50%, #adb5bd 50%); }
+    .nav-btn.active { border: 2px solid #000; font-weight: bold; }
+    .nav-btn.flagged::after { content: ''; position: absolute; top: 0; right: 0; border-width: 0 10px 10px 0; border-style: solid; border-color: transparent red transparent transparent; }
+    .sidebar-footer { padding: 15px; border-top: 1px solid #dee2e6; }
+    .submit-link { color: #0d6efd; text-decoration: none; cursor: pointer; }
+    .submit-link:hover { text-decoration: underline; }
+    .main-content { flex-grow: 1; display: flex; flex-direction: column; height: 100%; overflow-y: auto; }
+    #dashboard-container { padding: 30px; max-width: 1000px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+    .quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+    .quiz-card { background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s; }
+    .quiz-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .quiz-card h3 { margin: 0 0 10px 0; font-size: 18px; color: #0d6efd; line-height: 1.3; }
+    .quiz-card p { margin: 0 0 20px 0; color: #6c757d; font-size: 14px; }
+    .breadcrumb { padding: 15px 30px; background-color: #fff; border-bottom: 1px solid #dee2e6; color: #6c757d; font-size: 14px; }
+    .breadcrumb a { text-decoration: none; color: inherit; }
+    .breadcrumb a:hover { text-decoration: underline; color: #0d6efd; }
+    .breadcrumb-link { cursor: pointer; color: #0d6efd; }
+    .breadcrumb-link:hover { text-decoration: underline; }
+    #quiz-container { padding: 30px; max-width: 900px; user-select: text; -webkit-user-select: text; display: none; }
+    .question-layout { display: flex; gap: 20px; margin-bottom: 20px; }
+    .info-box { width: 130px; background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 15px; font-size: 13px; height: fit-content; }
+    .info-box h3 { margin: 0 0 10px 0; font-size: 16px; }
+    .flag-btn { color: #212529; background: none; border: none; padding: 0; cursor: pointer; margin-top: 15px; text-decoration: none; display: flex; align-items: center; gap: 5px; }
+    .flag-btn:hover { text-decoration: underline; }
+    .question-box { flex-grow: 1; background-color: #f0f7ff; border: 1px solid #cce1ff; padding: 20px; border-radius: 4px; }
+    .guideline-text { font-weight: bold; margin-bottom: 15px; font-size: 14px; color: #0d6efd; }
+    .question-text { font-size: 15px; margin-bottom: 20px; line-height: 1.6; }
+    
+    .option-label { display: flex; align-items: flex-start; padding: 12px 15px; margin-bottom: 10px; background-color: #ffffff; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; transition: background-color 0.15s, border-color 0.15s; line-height: 1.4; font-size: 14px; }
+    .option-label:hover { background-color: #e9ecef; }
+    .option-label.selected { background-color: #e7f5ff; border-color: #0d6efd; font-weight: bold; }
+    .option-label input[type="radio"] { margin-right: 12px; margin-top: 2px; accent-color: #0d6efd; transform: scale(1.1); }
+    
+    .essay-input { width: 100%; height: 120px; padding: 15px; border: 1px solid #ced4da; border-radius: 4px; font-size: 15px; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.5; }
+    .essay-input:focus { outline: none; border-color: #0d6efd; box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); }
+    
+    .clear-choice { display: inline-block; margin-top: 15px; color: #0d6efd; cursor: pointer; font-size: 14px; }
+    .clear-choice:hover { text-decoration: underline; }
+    .nav-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .btn { padding: 8px 16px; border: 1px solid #ced4da; background-color: #fff; cursor: pointer; border-radius: 4px; font-size: 14px; }
+    .btn-primary { background-color: #0d6efd; color: white; border-color: #0d6efd; }
+    .btn-primary:hover { background-color: #0a58ca; }
+    .btn-danger { background-color: #dc3545; color: white; border-color: #dc3545; }
+    .btn-danger:hover { background-color: #bb2d3b; }
+    #results-container { padding: 30px; max-width: 900px; display: none; user-select: text; -webkit-user-select: text; }
+    .result-item { background-color: #fff; border: 1px solid #dee2e6; border-radius: 4px; padding: 20px; margin-bottom: 15px; }
+    .result-item.correct { border-left: 5px solid #0d6efd; }
+    .result-item.incorrect { border-left: 5px solid #dc3545; }
+    .status-badge { font-weight: bold; margin-bottom: 10px; display: inline-block; }
+    .status-correct { color: #0d6efd; }
+    .status-incorrect { color: #dc3545; }
+    
+    @media (max-width: 768px) {
+        body { flex-direction: column; overflow: auto; height: auto; }
+        .sidebar { width: 100%; height: auto; order: 2; border-right: none; border-top: 2px solid #dee2e6; }
+        .main-content { order: 1; overflow-y: visible; }
+        #quiz-container, #results-container, #dashboard-container { padding: 15px; padding-bottom: 100px; }
+        .question-layout { flex-direction: column; gap: 10px; }
+        .info-box { width: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 15px; padding: 10px 15px; }
+        .info-box h3 { margin: 0; }
+        #q-status-display { margin-bottom: 0 !important; }
+        .flag-btn { margin-top: 0; }
+        .breadcrumb { padding: 10px 15px; font-size: 12px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="app-sidebar">
+    <div class="sidebar-header">
+        <div>Quiz navigation</div>
+        <div class="header-buttons">
+            <button class="action-btn" onclick="shuffleQuiz()">🔀 문제 섞기</button>
+            <button class="action-btn" onclick="resetOrder()">🔄 원래 순서</button>
+        </div>
+    </div>
+    <div class="nav-grid-container">
+        <div class="nav-grid" id="nav-grid"></div>
+    </div>
+    <div class="sidebar-footer">
+        <a class="submit-link" onclick="showResults()">Finish attempt ...</a>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="breadcrumb">
+        <a href="../index.html">🏠 홈</a> / <span class="breadcrumb-link" onclick="showDashboard()">임상약동학</span> / <span id="breadcrumb-current">퀴즈 목록</span>
+        <span id="mode-indicator" style="font-weight:bold; color:#0d6efd; margin-left:10px; display:none;">[퀴즈 풀이]</span>
+    </div>
+
+    <div id="dashboard-container">
+        <h2>임상약동학 퀴즈 목록</h2>
+        <div class="quiz-grid" id="quiz-grid"></div>
+    </div>
+    
+    <div id="quiz-container">
+        <div class="question-layout">
+            <div class="info-box">
+                <h3 id="q-number-display">Question 1</h3>
+                <div id="q-status-display" style="color: #6c757d; margin-bottom: 10px;">Not yet answered</div>
+                <div>Marked out of 1.00</div>
+                <button class="flag-btn" onclick="toggleFlag()" id="flag-btn-display">🚩 Flag question</button>
+            </div>
+            <div class="question-box">
+                <div class="guideline-text" id="guideline-display"></div>
+                <div class="question-text" id="q-text-display">Question text goes here</div>
+                <div id="options-container"></div>
+                <div class="clear-choice" onclick="clearChoice()">Clear my choice / 선택 취소</div>
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" id="prev-btn" onclick="changeQuestion(-1)">Previous page</button>
+            <button class="btn btn-primary" id="next-btn" onclick="changeQuestion(1)">Next page</button>
+        </div>
+    </div>
+
+    <div id="results-container">
+        <h2>퀴즈 결과</h2>
+        <div style="margin-bottom: 20px;">
+            <span id="score-display" style="font-size: 18px; font-weight: bold;"></span>
+        </div>
+        <div id="results-list"></div>
+        <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="resetOrder()">방금 푼 퀴즈 처음부터 다시 풀기</button>
+            <button class="btn btn-danger" id="retry-incorrect-btn" onclick="retryIncorrect()">❌ 틀린 문제만 다시 풀기</button>
+            <button class="btn" onclick="showDashboard()">목록으로 돌아가기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 2025 임상약동학 5-2 Geriatrics 퀴즈 (40문항)
+    const geriatricsQuizData = [
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "1. What is the primary intention of the AGS Beers CriteriaⓇ?",
+            options: [
+                "To promote the use of generic medications",
+                "To increase the use of medications among older adults",
+                "To eliminate all potentially inappropriate medications (PIMs) for older adults",
+                "To reduce older adults' exposure to potentially inappropriate medications (PIMs)"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "2. According to the 2023 updated AGS Beers CriteriaⓇ, which statement(s) is (are) correct?<br><br>1. First-generation antihistamines are highly anticholinergic.<br>2. Use of diphenhydramine in situations such as acute treatment of severe allergic reactions may be appropriate.<br>3. Cumulative exposure to anticholinergic drugs is associated with an increased risk of falls, delirium, and dementia, only in older adults.",
+            options: [
+                "1, 2",
+                "2, 3",
+                "1, 3",
+                "1, 2, 3"
+            ],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "3. Which of the following is NOT a first-generation antihistamine?",
+            options: [
+                "Brompheniramine",
+                "Chlorpheniramine",
+                "Cetirizine",
+                "Diphenhydramine"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "4. According to the 2023 updated AGS Beers Criteria®, what is a key consideration regarding the use of aspirin for primary prevention of cardiovascular disease in older adults?",
+            options: [
+                "Initiating aspirin in older adults is highly beneficial for primary prevention.",
+                "Studies suggest a lack of net benefit and potential for harm when initiating aspirin for primary prevention in older adults.",
+                "Aspirin is primarily indicated for older adults without established cardiovascular disease.",
+                "The risk of major bleeding from aspirin decreases with age in older adults."
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "5. According to the 2023 updated AGS Beers CriteriaⓇ, which of the following statements about warfarin for the treatment of nonvalvular atrial fibrillation or VTE is TRUE?",
+            options: [
+                "Warfarin is the preferred choice for anticoagulation in most patients due to its lower risk of bleeding.",
+                "Warfarin has a higher risk of major bleeding compared to DOACs but may be reasonable to continue in older adults with well-controlled INRs.",
+                "DOACs are less effective than warfarin for treating nonvalvular atrial fibrillation and VTE.",
+                "Warfarin should be started as initial therapy for all patients with nonvalvular atrial fibrillation or VTE."
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "6. According to the 2023 updated AGS Beers CriteriaⓇ, non-selective peripheral alpha-1 blockers is NOT recommended for routine treatment of hypertension due to a high risk of:",
+            options: [
+                "decompensated heart failure",
+                "delirium and dementia",
+                "myocardial ischemia",
+                "orthostatic hypotension"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "7. Which of the following medications is NOT a non-selective peripheral alpha-1 blocker used for the treatment of hypertension?",
+            options: [
+                "Doxazosin",
+                "Terazosin",
+                "Atenolol",
+                "Prazosin"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "8. According to the 2023 updated AGS Beers CriteriaⓇ, which of the following antidepressants is considered highly anticholinergic and should be avoided due to its potential to cause sedation and orthostatic hypotension?<br><br>1. Nortriptyline<br>2. Paroxetine<br>3. Desipramine",
+            options: [
+                "1, 2",
+                "2, 3",
+                "1, 3",
+                "1, 2, 3"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "9. According to the 2023 updated AGS Beers CriteriaⓇ, benztropine or trihexyphenidyl are recommended for prevention or treatment of extrapyramidal symptoms due to antipsychotics.",
+            options: [
+                "True",
+                "False"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "10. According to the 2023 updated AGS Beers CriteriaⓇ, which of the following statements is true regarding the use of antipsychotics in patients with dementia?",
+            options: [
+                "Antipsychotics are recommended for long-term use in treating dementia-related behavioral issues.",
+                "There is no increased risk of stroke or mortality associated with antipsychotic use in dementia patients.",
+                "Antipsychotics should be avoided in dementia patients unless nonpharmacologic options have failed and the patient poses a threat to themselves or others.",
+                "Antipsychotics are safe and effective for treating behavioral problems in dementia without any risks."
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "11. According to the 2023 updated AGS Beers Criteria®, which of the following is a potential risk associated with the use of benzodiazepines in older adults?",
+            options: [
+                "Increased metabolism of long-acting agents",
+                "Decreased sensitivity to benzodiazepines",
+                "Reduced risk of cognitive impairment",
+                "Clinically significant physical dependence"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "12. According to the 2023 updated AGS Beers CriteriaⓇ, when considering the use of benzodiazepines, for which condition may they be considered appropriate?",
+            options: [
+                "Seizure disorders",
+                "Migraine",
+                "Allergic reactions",
+                "Hypertension"
+            ],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "13. According to the 2023 updated AGS Beers CriteriaⓇ, which of the following is a similarity between \"Z-drugs\" and benzodiazepines regarding their effects on older adults?",
+            options: [
+                "Reduced risk of delirium",
+                "Minimal emergency room visits",
+                "Enhanced sleep duration",
+                "Increased risk of falls and fractures"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "14. According to the 2023 updated AGS Beers Criteria®, if a healthcare professional decides to prescribe a sulfonylurea for diabetes management despite the associated risks, which type of sulfonylurea is preferred to minimize the risk of prolonged hypoglycemia?",
+            options: [
+                "Glipizide",
+                "Glyburide (Glibenclamide)",
+                "Glimepiride"
+            ],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "15. According to the 2023 updated AGS Beers Criteria, what is a potential risk associated with the long-term use of proton pump inhibitors?",
+            options: [
+                "Reduced risk of GI malignancies",
+                "Enhanced immune system function",
+                "Decreased risk of C.difficile infection",
+                "Increased risk of bone loss and fractures"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "16. According to the 2023 updated AGS Beers Criteria, which adverse effect is associated with metoclopramide and may pose a higher risk in frail older adults with prolonged exposure?",
+            options: [
+                "Extrapyramidal effects, including tardive dyskinesia",
+                "Hyponatremia",
+                "Gastrointestinal bleeding",
+                "Respiratory depression"
+            ],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "17. According to the AGS 2023 Updated AGS Beers Criteria*, of all the NSAIDs, ________ has the most adverse effects, including a higher risk of adverse CNS effects.",
+            options: [
+                "Etodolac",
+                "Flurbiprofen",
+                "Indomethacin",
+                "Diclofenac"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "18. According to the 2023 updated AGS Beers Criteria, this analgesic is not effective in commonly used dosages and may have a higher risk of neurotoxicity, including delirium, than other opioids.",
+            options: [
+                "Hydrocodone",
+                "Meperidine",
+                "Oxycodone",
+                "Morphine"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "19. According to the 2023 updated AGS Beers Criteria, choose muscle relaxants that are known for poorly tolerated by older adults due to anticholinergic adverse effects, sedation, and increased risk of fractures.<br><br>1. Carisoprodol<br>2. Cyclobenzaprine<br>3. Methocarbamol",
+            options: [
+                "1, 2",
+                "1, 3",
+                "2, 3",
+                "1, 2, 3"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "20. According to the 2023 updated AGS Beers CriteriaⓇ, which medication brings a risk of fluid retention and heart failure?<br><br>1. Thiazolidinedione<br>2. Dihydropyridine CCB<br>3. NSAIDs, COX-2 inhibitors",
+            options: [
+                "1, 2",
+                "1, 3",
+                "2, 3",
+                "1, 2, 3"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "21. According to the 2023 updated AGS Beers CriteriaⓇ, what potential risk is associated with the use of SGLT2 inhibitors in older adults?",
+            options: [
+                "Enhanced cognitive function",
+                "Increased risk of cardiovascular events",
+                "Increased risk of urogenital infections and euglycemic diabetic ketoacidosis",
+                "Reduced risk of hypoglycemia"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "22. According to the 2023 updated AGS Beers CriteriaⓇ, what should be considered when using Prasugrel or Ticagrelor in adults 75 years old and older?",
+            options: [
+                "Always use the standard dose of Prasugrel without adjustments",
+                "Both increase the risk of major bleeding compared with clopidogrel, so use with caution in this age group",
+                "There is no risk of bleeding, only cardiovascular benefits",
+                "They are completely safe and require no special precautions"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "23. According to the 2023 updated AGS Beers Criteria, what is a potential risk when combining opioids with benzodiazepines?",
+            options: [
+                "Reduced effectiveness of both medications",
+                "Improved cognitive function",
+                "Increased risk of overdose and adverse events",
+                "No additional risk"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "24. According to the 2023 updated AGS Beers CriteriaⓇ, what risk is associated with the concurrent use of RAS inhibitors with amiloride?",
+            options: [
+                "Hyperglycemia",
+                "Hyperkalemia",
+                "Hypercalcemia",
+                "Hypernatremia"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "25. According to the 2023 updated AGS Beers Criteria, which of the following combination with warfarin is NOT associated with an increased risk of bleeding?",
+            options: [
+                "Amiodarone",
+                "Trimethoprim-sulfamethoxazole",
+                "Azithromycin",
+                "Ibuprofen"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "26. According to the 2023 updated AGS Beers Criteria, increased risk of fall and of fracture with concurrent use of:<br><br>1. Antiepileptics and Antidepressants<br>2. Antipsychotics and Benzodiazepines<br>3. Opioids and Skeletal muscle relaxants",
+            options: [
+                "1, 2",
+                "1, 3",
+                "2, 3",
+                "1, 2, 3"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "27. According to the 2023 updated AGS Beers Criteria, which statement(s) is (are) true regarding adjustment with varying levels of kidney function in older adults?<br><br>1. Nitrofurantoin: avoid if CrCl < 30ml/min<br>2. Trimethoprim-sulfamethoxazole: reduce dosage if CrCl is 15-29ml/min<br>3. Ciprofloxacin dosage used to treat common infections typically require reduction when CrCl < 30ml/min",
+            options: [
+                "1, 2",
+                "1, 3",
+                "2, 3",
+                "1, 2, 3"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "28. According to the AGS 2023 Updated AGS Beers Criteria®, choose the drugs with strong anticholinergic properties.<br><br>1. Chlorpheniramine<br>2. Oxybutynin<br>3. Olanzapine",
+            options: [
+                "1, 2",
+                "1, 3",
+                "2, 3",
+                "1, 2, 3"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "29. According to the 2023 STOPP/START criteria version 3: Which medication is inappropriate for older adults with a history of peptic ulcer disease unless given with a PPI?",
+            options: [
+                "Gabapentin",
+                "Paracetamol",
+                "Ibuprofen",
+                "Codeine"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "30. According to the 2023 STOPP/START criteria version 3: Which anticholinergic drug should be avoided in older adults with chronic constipation?",
+            options: [
+                "Tamsulosin",
+                "Oxybutynin",
+                "Finasteride",
+                "Doxazosin"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "31. According to the 2023 STOPP/START criteria version 3: Which medication is inappropriate for older adults with a history of hyponatremia?",
+            options: [
+                "Amlodipine",
+                "Carbamazepine",
+                "Aspirin",
+                "Metoprolol"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "32. According to the 2023 STOPP/START criteria version 3: Which medication is inappropriate for older adults with a history of urinary retention?",
+            options: [
+                "Amitriptyline",
+                "Metformin",
+                "Paracetamol",
+                "Losartan"
+            ],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "33. According to the 2023 STOPP/START criteria version 3: Which medication should be avoided in older adults with a history of osteoporosis due to increased fracture risk?",
+            options: [
+                "Amlodipine",
+                "Metformin",
+                "Paracetamol",
+                "Prednisolone (long-term)"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "34. According to the 2023 STOPP/START criteria version 3: Which medication should not be used in older adults with a history of chronic constipation?",
+            options: [
+                "Bisoprolol",
+                "Amlodipine",
+                "Ramipril",
+                "Verapamil"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "35. Which medication is inappropriate for older adults with a history of Parkinson's disease due to risk of worsening symptoms?",
+            options: [
+                "Aspirin",
+                "Metoclopramide",
+                "Paracetamol",
+                "Domperidone"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "36. According to the 2023 STOPP/START criteria version 3: Which medication is considered potentially inappropriate (STOPP) for heart failure with normal systolic ventricular function?",
+            options: [
+                "Digoxin",
+                "Furosemide",
+                "Bisoprolol",
+                "Ramipril"
+            ],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "37. According to the 2023 STOPP/START criteria version 3: Which medication should be avoided in patients with bradycardia (< 50/min) due to risk of asystole?",
+            options: [
+                "Beta-blocker",
+                "Statin",
+                "Aspirin",
+                "Metformin"
+            ],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "38. According to the 2023 STOPP/START criteria version 3: Which medication should be avoided in patients with known QTc prolongation?",
+            options: [
+                "Amlodipine",
+                "Citalopram (> 20 mg/day)",
+                "Metformin",
+                "Losartan"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "39. According to the 2023 STOPP/START criteria version 3: Which combination should be avoided due to risk of hyperkalaemia without regular potassium monitoring?",
+            options: [
+                "Statin and ezetimibe",
+                "Metformin and sitagliptin",
+                "ACE inhibitor and amiloride",
+                "Aspirin and paracetamol"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Geriatrics]",
+            text: "40. According to the 2023 STOPP/START criteria version 3: Which class of drugs should not be prescribed for chronic constipation in older adults due to risk of electrolyte imbalance?",
+            options: [
+                "Stool softeners",
+                "Bulk-forming laxatives",
+                "Stimulant laxatives",
+                "Osmotic laxatives"
+            ],
+            answer: 2
+        }
+    ];
+
+    // 퀴즈 라이브러리 목록
+    const quizLibrary = [
+        {
+            id: 'pk_geriatrics_2025',
+            title: '2025 임상약동학 5-2 Geriatrics 퀴즈 (40문항)',
+            data: geriatricsQuizData
+        }
+    ];
+
+    let currentOriginalData = []; 
+    let activeQuizData = [];      
+    let currentQuestion = 0;
+    let userAnswers = [];
+    let flaggedQuestions = [];
+
+    function showDashboard() {
+        document.getElementById('dashboard-container').style.display = 'block';
+        document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('results-container').style.display = 'none';
+        document.getElementById('app-sidebar').style.display = 'none';
+        document.getElementById('breadcrumb-current').innerText = '퀴즈 목록';
+        document.getElementById('mode-indicator').style.display = 'none';
+
+        const grid = document.getElementById('quiz-grid');
+        grid.innerHTML = '';
+        
+        quizLibrary.forEach(quiz => {
+            const card = document.createElement('div');
+            card.className = 'quiz-card';
+            card.innerHTML = `
+                <h3>${quiz.title}</h3>
+                <p>총 ${quiz.data.length}문항</p>
+                <button class="btn btn-primary" onclick="startQuiz('${quiz.id}')">이 퀴즈 풀기</button>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function startQuiz(quizId) {
+        const selectedQuiz = quizLibrary.find(q => q.id === quizId);
+        currentOriginalData = selectedQuiz.data;
+        activeQuizData = JSON.parse(JSON.stringify(currentOriginalData));
+        
+        document.getElementById('breadcrumb-current').innerText = selectedQuiz.title;
+        document.getElementById('mode-indicator').style.display = 'inline';
+        document.getElementById('dashboard-container').style.display = 'none';
+        document.getElementById('results-container').style.display = 'none';
+        document.getElementById('quiz-container').style.display = 'block';
+        document.getElementById('app-sidebar').style.display = 'flex';
+        
+        resetQuizState();
+        init();
+    }
+
+    function resetQuizState() {
+        currentQuestion = 0;
+        userAnswers = new Array(activeQuizData.length).fill(null);
+        flaggedQuestions = new Array(activeQuizData.length).fill(false);
+    }
+
+    function shuffleQuiz() {
+        if (!confirm('문항 순서를 무작위로 섞으시겠습니까?')) return;
+        for (let i = activeQuizData.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [activeQuizData[i], activeQuizData[j]] = [activeQuizData[j], activeQuizData[i]];
+        }
+        resetQuizState();
+        init();
+    }
+
+    function resetOrder() {
+        activeQuizData = JSON.parse(JSON.stringify(currentOriginalData));
+        resetQuizState();
+        document.getElementById('results-container').style.display = 'none';
+        document.getElementById('quiz-container').style.display = 'block';
+        document.getElementById('app-sidebar').style.display = 'flex';
+        init();
+    }
+
+    function init() {
+        renderNavGrid();
+        renderQuestion(currentQuestion);
+    }
+
+    function renderNavGrid() {
+        const grid = document.getElementById('nav-grid');
+        grid.innerHTML = '';
+        for (let i = 0; i < activeQuizData.length; i++) {
+            const btn = document.createElement('div');
+            btn.className = 'nav-btn';
+            if (i === currentQuestion) btn.classList.add('active');
+            if (userAnswers[i] !== null && userAnswers[i] !== '') btn.classList.add('answered');
+            if (flaggedQuestions[i]) btn.classList.add('flagged');
+            btn.innerText = i + 1;
+            btn.onclick = () => { currentQuestion = i; renderQuestion(currentQuestion); };
+            grid.appendChild(btn);
+        }
+    }
+
+    function renderQuestion(index) {
+        const q = activeQuizData[index];
+        document.getElementById('q-number-display').innerText = `Question ${index + 1}`;
+        const hasAns = userAnswers[index] !== null && userAnswers[index] !== '';
+        document.getElementById('q-status-display').innerText = hasAns ? 'Answered' : 'Not yet answered';
+        document.getElementById('flag-btn-display').innerHTML = flaggedQuestions[index] ? '🚩 Remove flag' : '🚩 Flag question';
+        
+        document.getElementById('guideline-display').innerHTML = q.guideline || '';
+        document.getElementById('q-text-display').innerHTML = q.text;
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        
+        if (q.type === 'essay') {
+            const area = document.createElement('textarea');
+            area.className = 'essay-input';
+            area.placeholder = '답안을 입력하세요...';
+            area.value = userAnswers[index] || '';
+            area.oninput = (e) => {
+                userAnswers[currentQuestion] = e.target.value.trim() || null;
+                renderNavGrid();
+            };
+            container.appendChild(area);
+        } else {
+            q.options.forEach((optText, optIdx) => {
+                const label = document.createElement('label');
+                label.className = 'option-label' + (userAnswers[currentQuestion] === optIdx ? ' selected' : '');
+                label.innerHTML = `
+                    <input type="radio" name="quiz-option" value="${optIdx}" ${userAnswers[currentQuestion] === optIdx ? 'checked' : ''}>
+                    <span><strong>${optIdx + 1}.</strong> ${optText}</span>
+                `;
+                label.onclick = () => {
+                    userAnswers[currentQuestion] = optIdx;
+                    renderNavGrid();
+                    renderQuestion(currentQuestion);
+                };
+                container.appendChild(label);
+            });
+        }
+        
+        document.getElementById('prev-btn').style.visibility = index === 0 ? 'hidden' : 'visible';
+        const next = document.getElementById('next-btn');
+        next.innerText = index === activeQuizData.length - 1 ? 'Finish attempt ...' : 'Next page';
+        next.onclick = index === activeQuizData.length - 1 ? showResults : () => { currentQuestion++; renderQuestion(currentQuestion); };
+    }
+
+    function clearChoice() { 
+        userAnswers[currentQuestion] = null; 
+        renderNavGrid();
+        renderQuestion(currentQuestion); 
+    }
+    
+    function changeQuestion(s) { 
+        currentQuestion += s; 
+        renderQuestion(currentQuestion); 
+    }
+    
+    function toggleFlag() { 
+        flaggedQuestions[currentQuestion] = !flaggedQuestions[currentQuestion]; 
+        renderNavGrid();
+        renderQuestion(currentQuestion); 
+    }
+
+    function retryIncorrect() {
+        const incorrect = activeQuizData.filter((q, i) => {
+            if (q.type === 'essay') {
+                const u = (userAnswers[i] || '').toLowerCase().replace(/\s+/g, '');
+                const c = q.options[q.answer].toLowerCase().replace(/\s+/g, '');
+                return u !== c;
+            } else {
+                return userAnswers[i] !== q.answer;
+            }
+        });
+        
+        if (incorrect.length === 0) return alert('모두 정답입니다!');
+        activeQuizData = incorrect;
+        resetQuizState();
+        document.getElementById('results-container').style.display = 'none';
+        document.getElementById('quiz-container').style.display = 'block';
+        document.getElementById('app-sidebar').style.display = 'flex';
+        init();
+    }
+
+    function showResults() {
+        if (!confirm('제출하시겠습니까?')) return;
+        document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('app-sidebar').style.display = 'none';
+        document.getElementById('results-container').style.display = 'block';
+        
+        const list = document.getElementById('results-list');
+        list.innerHTML = '';
+        let score = 0;
+
+        activeQuizData.forEach((q, i) => {
+            let correct = false;
+            let uText = '응답 안 함';
+            let cText = '';
+
+            if (q.type === 'essay') {
+                cText = q.options[q.answer];
+                const u = (userAnswers[i] || '').toLowerCase().replace(/\s+/g, '');
+                const c = cText.toLowerCase().replace(/\s+/g, '');
+                correct = u !== '' && u === c;
+                uText = userAnswers[i] || '응답 안 함';
+            } else {
+                correct = userAnswers[i] === q.answer;
+                cText = `${q.answer + 1}. ${q.options[q.answer]}`;
+                if (userAnswers[i] !== null) {
+                    uText = `${userAnswers[i] + 1}. ${q.options[userAnswers[i]]}`;
+                }
+            }
+            
+            if (correct) score++;
+            
+            const item = document.createElement('div');
+            item.className = `result-item ${correct ? 'correct' : 'incorrect'}`;
+            
+            let statusHTML = `<span class="status-badge ${correct ? 'status-correct' : 'status-incorrect'}">${correct ? '✔ 정답' : '✘ 오답'}</span>`;
+
+            item.innerHTML = `
+                ${statusHTML}
+                <div style="font-size:13px; color:#0d6efd; font-weight:bold;">${q.guideline || ''}</div>
+                <div style="font-weight:bold; margin:8px 0 15px 0;">${q.text}</div>
+                <div style="color:#6c757d; font-size:14px;">내가 선택한 답:<br> <span style="display:inline-block; margin-top:4px; padding:8px 12px; background:#f8f9fa; border:1px solid #dee2e6; border-radius:4px; width:100%; box-sizing:border-box; color:#333;">${uText}</span></div>
+                <div style="color:#0d6efd; font-weight:bold; font-size:14px; margin-top:10px;">정답:<br> <span style="display:inline-block; margin-top:4px; padding:8px 12px; background:#f0f7ff; border:1px solid #cce1ff; border-radius:4px; width:100%; box-sizing:border-box; color:#333;">${cText}</span></div>
+            `;
+            list.appendChild(item);
+        });
+        
+        document.getElementById('score-display').innerText = `${activeQuizData.length}문항 중 ${score}문항 정답 (${Math.round(score/activeQuizData.length*100)}%)`;
+        document.getElementById('retry-incorrect-btn').style.display = score === activeQuizData.length ? 'none' : 'inline-block';
+    }
+
+    // 초기 화면 자동 실행
+    showDashboard();
+</script>
+</body>
+</html>
