@@ -168,7 +168,352 @@
 </div>
 
 <script>
-    // 2025 임상약동학 5-2 Geriatrics 퀴즈 (40문항)
+    // 1. 2025 임상약동학 중간 퀴즈 (45문항)[cite: 30]
+    const midQuizData = [
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "1. Which of the following statement(s) is (are) true regarding drug absorption?<br><br>1. When a drug is administered extravascularly to patients, it must be absorbed across biologic membranes to reach the systemic circulation.<br>2. If the drug is given orally, the drug molecules must pass through the GI tract wall into capillaries.<br>3. For transdermal patches, the drug must penetrate the skin to enter the vascular system.",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 6
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "2. If 1g of a drug is given orally and 300mg is absorbed into the systemic circulation, what is bioavailability?",
+            options: ["0.25", "0.3", "0.5", "0.75"],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "3. Volume of distribution determines:<br><br>1. The time to reach steady state<br>2. The loading dose required to achieve the desired steady-state concentration<br>3. The maintenance dose required to achieve the desired steady-state concentration",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "4. If the first 80mg dose of gentamicin is administered intravenously and results in a plasma concentration is 8mg/L, the volume of distribution would be:",
+            options: ["1L", "5L", "10L", "50L"],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "5. A 100mg dose of drug X is given to two different patients every 8 hours. Which patient (A or B) is likely to achieve higher steady-state plasma concentrations?<br><br>Patient A: Elimination Rate = 0.2 hr⁻¹, Vd = 10 L<br>Patient B: Elimination Rate = 0.4 hr⁻¹, Vd = 20 L",
+            options: ["Patient A", "Patient B", "Both patients would achieve the same steady-state plasma concentrations."],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "6. Clearance determines:<br><br>1. The dose interval<br>2. The loading dose required to achieve the desired steady-state concentration<br>3. The maintenance dose required to achieve the desired steady-state concentration",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "7. If a drug is given by continuous IV infusion at a rate of 20mg/hour and produces a steady-state plasma concentration of 10mg/L, what infusion rate will result in a new Css of 15mg/L?",
+            options: ["30mg/hour", "35mg/hour", "40mg/hour", "45mg/hour"],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "8. If the elimination rate constant is 0.15hr-1, the percent of drug removed per hour is:",
+            options: ["5%", "10%", "15%", "20%", "25%"],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "9. For a drug that has an initial plasma concentration of 120mg/L and a half-life of 3hours, what would the plasma concentration be 12hours after the initial concentration?",
+            options: ["3.75mg/L", "7.5mg/L", "15mg/L", "30mg/L"],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "10. Factors to be considered when prescribing the best drug dose of a patient include:<br><br>1. age<br>2. weight<br>3. concurrent disease states and drug therapies",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 6
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "11. When providing a clinical pharmacokinetics consultation service, what is the primary goal?",
+            options: [
+                "To recommend a specific treatment plan for a patient’s condition",
+                "To determine the appropriate dosing regimen of a drug for an individual patient",
+                "To conduct randomized clinical trials for new drug development",
+                "To assess the patient’s medical history and lifestyle factors"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "12. Clinical pharmacokinetics consultation service is valuable when:",
+            options: [
+                "Narrow intersubject variation in drug plasma levels",
+                "A wide therapeutic index",
+                "The drug’s desired pharmacologic effects can be assessed readily by other simple means",
+                "A good correlation between the pharmacologic response and plasma concentration"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "13. Which of the following statement regarding an optimal dosage in pediatrics is (are) true?<br><br>1. Dosage regimens can be based on body weight or surface area of a pediatric patient extrapolated from adult data.<br>2. Bioavailability, pharmacokinetics, pharmacodynamics, efficacy, and safety information can be similar between pediatric and adult patient.<br>3. Efficacy, and safety information can differ among pediatric patients because of differences in age, organ function, and disease state.",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "14. Kernicterus was reported in neonates receiving _________ binding sites in the blood to cause hyperbilirubinemia.",
+            options: ["Phenobarbital", "Acetaminophen", "Sulfonamides", "Tetracycline", "Chloramphenicol"],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "15. Which of the following statements is true about adverse effects of drugs in pediatric patients?",
+            options: [
+                "Ciprofloxacin should be used without caution in children.",
+                "Promethazine is safe for use in infants.",
+                "Tetracyclines are indicated for patients younger than 8 years of age.",
+                "Aminoglycosides can be used safely in children at recommended doses with monitoring."
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "16. Which of the following statements best explains why medications containing benzyl alcohol should be avoided in neonates?",
+            options: [
+                "Benzyl alcohol improves solubility and prevents toxicity in newborns.",
+                "Benzyl alcohol enhances hepatic metabolism and causes enzyme induction in infants.",
+                "Neonates have reduced glycine conjugation, leading to accumulation of benzoic acid and metabolic toxicity.",
+                "Benzyl alcohol is safely excreted by the immature kidney."
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "17. What is the primary risk associated with valproic acid in children under 2 years of age?",
+            options: [
+                "Risk of developmental kidney damage",
+                "Risk of respiratory infections",
+                "Risk of developing fetal hepatotoxicity",
+                "Risk of gastrointestinal bleeding",
+                "Risk of cardiotoxicity"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "18. Compared with other patients, premature infants may have:<br><br>1. Increased absorption of oral doses of weak acids such as phenobarbital<br>2. Increased percutaneous absorption of drugs<br>3. Consistently lower absorption from rectally administered drugs than with orally administered drugs",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "19. Premature infants need higher plasma concentrations of morphine for pain control than older patients because they have:<br><br>1. Decreased absorption of morphine<br>2. Decreased metabolism to the more active metabolite<br>3. Increased urinary excretion of morphine",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "20. Which of the following medication(s) is (are) well known for the teratogenic effects?<br><br>1. Acetaminophen<br>2. Isotretinoin<br>3. Thalidomide",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 4
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "21. Which of the following age-related changes contributes to alterations in absorption in older adults?",
+            options: [
+                "Increased passive diffusion",
+                "Increased active transport",
+                "Increased gastrointestinal pH",
+                "Increased first pass effect"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "22. Which of the following nutrients may have impaired absorption in older adults?<br><br>1. Iron<br>2. Calcium<br>3. Leucine",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 6
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "23. Which of the following is true regarding changes affecting drug distribution in the elderly?<br><br>1. The volume of distribution of water-soluble drugs is decreased<br>2. Tissue perfusion may decrease, slowing the distribution to less highly perfused tissues<br>3. Blood-brain barrier permeability may also be altered, affecting distribution of medications into the CV system",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "24. Which of the following is true regarding changes affecting drug metabolism in the elderly?<br><br>1. Decreases in hepatic blood flow can decrease significantly the metabolism of low extraction ratio drugs<br>2. Elderly with reduced serum albumin concentrations may experience a significant increase in fraction unbound, leading to increased total hepatic clearance<br>3. Frailty is associated with inflammation, which may downregulate drug metabolism and transport",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 5
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "25. AB is an 85-year-old man who presents to the clinic. His medical history is significant for HTN, dyslipidemia, BPH, and MDD. His current medications include lisinopril, atorvastatin, tamsulosin, diazepam at bedtime PRN for sleep, and escitalopram. His daughter reports that he has been more lethargic and unsteady walking during the past 3 days. The patient admits taking diazepam every night this past week. His BP is 135/75 mmHg, and his HR is 76 bpm.<br>Which medication is most likely contributing to this patient’s lethargy and confusion?",
+            options: ["Diazepam", "Tamsulosin", "Lisinopril", "Escitalopram", "Atorvastatin"],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "26. An 80-year-old woman tells you that she was taking ibuprofen 200mg PO TID for arthritic pain for the past few months. Which one of the following pharmacokinetic changes in the elderly is most concerning in this case?",
+            options: [
+                "Decrease albumin",
+                "Decreased phase I metabolism",
+                "Delayed gastric emptying time",
+                "Decreased hepatic blood flow"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "27. Which of the following is a potential risk of deprescribing?",
+            options: [
+                "Inappropriate prescribing",
+                "Polypharmacy",
+                "Therapeutic failure",
+                "Adverse drug withdrawal event"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "28. Increased sensitivity to the CNS effects of medications in older adults has been demonstrated for:<br><br>1. Anticholinergic medications<br>2. Antipsychotics medications<br>3. Benzodiazepines",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 6
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "29. Which of the following conditions may be exacerbated by the use of anticholinergic medication?",
+            options: ["Cognitive impairment", "Hypertension", "Insomnia", "Heart failure"],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "30. Which of the following methods is commonly used to estimate creatinine clearance (CrCl)?",
+            options: ["Framingham equation", "Cockcroft-Gault equation", "Child-Pugh classification", "MELD score"],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "31. Which of the following statements regarding PK consideration in renal disease is/are true?<br><br>1. GI motility and gastric emptying time can be altered by the neuropathy associated with uremia<br>2. Due to the increased gastric PH in patient with uremia, bioavailability of ferrous sulfate may be affected.<br>3. Oral bioavailability of propranolol may be increased in patients with renal impairment.",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 6
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "32. When dosing medications in patients with CKD, which of the following should be considered first?",
+            options: [
+                "The drug's brand name formulation",
+                "The patient's dietary sodium intake",
+                "The drug's primary route of elimination",
+                "The patient's body mass index"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "33. What is(are) the factor(s) affecting dialyzability of drugs?<br>I. Water solubility<br>II. Protein binding<br>III. Molecular weight<br>IV. Drugs with large volume of distribution",
+            options: ["I", "I, II", "I, II, III", "I, II, III, IV"],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "34. Which of the following statements about drug dosing in dialysis patients is most accurate?",
+            options: [
+                "Drug removal is not affected by dialysis membrane type.",
+                "Supplemental dosing after dialysis is never required.",
+                "Highly protein-bound drugs are usually not removed by dialysis.",
+                "Dialysis removes all water-soluble drugs effectively."
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "35. Which of the following drugs is most likely to be removed by conventional hemodialysis (i.e., hemodialysis using a cellulose membrane)?",
+            options: [
+                "Amlodipine (MW = 567; VD = 21 L/kg; plasma protein binding >95%)",
+                "Atenolol (MW = 266; VD = 1.1 L/kg; plasma protein binding = 3%)",
+                "Digoxin (MW = 781; VD = 4 to 7 L/kg; plasma protein binding = 20% to 25%)",
+                "Vancomycin (MW = 1,449; VD = 0.47 to 1.1 L/kg; plasma protein binding = 52% to 60%)"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "36. Which of the following statement(s) is (are) true regarding distribution changes in patients with renal insufficiency?<br><br>1. Drugs that are not highly protein bound such as gentamicin have little change in their Vd in renal disease<br>2. A decrease in the plasma protein binding of phenytoin leads to an increase in the apparent Vd<br>3. The Vd of digoxin is decreased in renal disease due to a decrease in myocardial tissue uptake of digoxin",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 4
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "37. What is the most appropriate monitoring approach for phenytoin therapy in a CKD patient?",
+            options: [
+                "Monitor total phenytoin concentrations only.",
+                "Adjust dose based on total concentration using the standard therapeutic range (10-20 mg/L).",
+                "Monitor unbound (free) phenytoin concentration or use albumin-corrected equations.",
+                "Reduce phenytoin dose by 50% automatically."
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "38. Which of the following best describes the relationship between meperidine and its metabolite normeperidine?",
+            options: [
+                "Meperidine has CNS stimulatory activity, while normeperidine is sedative.",
+                "Normeperidine has CNS stimulatory activity and can cause seizures.",
+                "Both have identical CNS depressant properties.",
+                "Normeperidine is inactive and safely excreted."
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "39. Which of the following statements) concerning the changes in PK or PD of medications in patients with renal insufficiency is (are) true?<br><br>1. The active metabolite of morphine, morphine-6-glucuronide as well as its principal metabolite, morphine-3-glucuronide, do accumulate in renal disease<br>2. Codeine, propoxyphene, and dihydrocodeine have been associated with CNS toxicity in patients with renal failure.<br>3. The pharmacokinetics of itraconazole and voriconazole are significantly altered in patients with renal dysfunction",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "40. According to the AGS 2023 Updated AGS Beers Criteria® for PIM Use in Older Adults, the concurrent use of a combination of three or more CNS agents (antidepressants, antipsychotics, benzodiazepines, antiepileptics, and opioids) should be avoided in older adults due to:",
+            options: ["increased fall risk", "increased kidney damage", "increased fluid retention", "increased GI irritation"],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "41. According to the AGS 2023 Updated AGS Beers Criteria® for PIM Use in Older Adults, TMP-SMX increased risk of ________________ in combination with ACEIs and ARBs in patients with reduced kidney function.",
+            options: ["hyperkalemia", "hypernatremia", "hyperuricemia", "hypercalcemia"],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "42. According to the 2023 updated AGS Beers Criteria®, what is a potential risk associated with the long-term use of proton-pump inhibitors?",
+            options: [
+                "Decreased risk of C. difficile infection",
+                "Reduced risk of GI malignancies",
+                "Increased risk of bone loss and fractures",
+                "Enhanced immune system function"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "43. According to the AGS 2023 Updated AGS Beers Criteria® for PIM Use in Older Adults, gabapentin dose should be reduced in individuals with a CrCl < ___ mL/min due to CNS adverse effects.",
+            options: ["30", "40", "50", "60"],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "44. According to the 2023 STOPP/START criteria (version 3), which medication should be avoided in patients with bradycardia (<50/min) due to the risk of asystole?",
+            options: ["Aspirin", "Metformin", "Metoprolol", "Simvastatin"],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 중간]",
+            text: "45. According to the 2023 STOPP/START criteria (version 3), which medication is inappropriate for older adults with a history of Parkinson's disease due to risk of worsening parkinsonian symptoms?",
+            options: ["Metoclopramide", "Aspirin", "Paracetamol", "Domperidone"],
+            answer: 0
+        }
+    ];
+
+    // 2. 기존 2025 임상약동학 5-2 Geriatrics 퀴즈 (40문항)
     const geriatricsQuizData = [
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
@@ -184,26 +529,13 @@
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "2. According to the 2023 updated AGS Beers CriteriaⓇ, which statement(s) is (are) correct?<br><br>1. First-generation antihistamines are highly anticholinergic.<br>2. Use of diphenhydramine in situations such as acute treatment of severe allergic reactions may be appropriate.<br>3. Cumulative exposure to anticholinergic drugs is associated with an increased risk of falls, delirium, and dementia, only in older adults.",
-            options: [
-                "1",
-                "2",
-                "3",
-                "1, 2",
-                "1, 3",
-                "2, 3",
-                "1, 2, 3"
-            ],
+            options: ["1", "2", "3", "1, 2", "1, 3", "2, 3", "1, 2, 3"],
             answer: 3
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "3. Which of the following is NOT a first-generation antihistamine?",
-            options: [
-                "Brompheniramine",
-                "Chlorpheniramine",
-                "Cetirizine",
-                "Diphenhydramine"
-            ],
+            options: ["Brompheniramine", "Chlorpheniramine", "Cetirizine", "Diphenhydramine"],
             answer: 2
         },
         {
@@ -231,46 +563,25 @@
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "6. According to the 2023 updated AGS Beers CriteriaⓇ, non-selective peripheral alpha-1 blockers is NOT recommended for routine treatment of hypertension due to a high risk of:",
-            options: [
-                "decompensated heart failure",
-                "delirium and dementia",
-                "myocardial ischemia",
-                "orthostatic hypotension"
-            ],
+            options: ["decompensated heart failure", "delirium and dementia", "myocardial ischemia", "orthostatic hypotension"],
             answer: 3
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "7. Which of the following medications is NOT a non-selective peripheral alpha-1 blocker used for the treatment of hypertension?",
-            options: [
-                "Doxazosin",
-                "Terazosin",
-                "Atenolol",
-                "Prazosin"
-            ],
+            options: ["Doxazosin", "Terazosin", "Atenolol", "Prazosin"],
             answer: 2
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "8. According to the 2023 updated AGS Beers CriteriaⓇ, which of the following antidepressants is considered highly anticholinergic and should be avoided due to its potential to cause sedation and orthostatic hypotension?<br><br>1. Nortriptyline<br>2. Paroxetine<br>3. Desipramine",
-            options: [
-                "1",
-                "2",
-                "3",
-                "1, 2",
-                "1, 3",
-                "2, 3",
-                "1, 2, 3"
-            ],
+            options: ["1", "2", "3", "1, 2", "1, 3", "2, 3", "1, 2, 3"],
             answer: 6
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "9. According to the 2023 updated AGS Beers CriteriaⓇ, benztropine or trihexyphenidyl are recommended for prevention or treatment of extrapyramidal symptoms due to antipsychotics.",
-            options: [
-                "True",
-                "False"
-            ],
+            options: ["True", "False"],
             answer: 1
         },
         {
@@ -298,12 +609,7 @@
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "12. According to the 2023 updated AGS Beers CriteriaⓇ, when considering the use of benzodiazepines, for which condition may they be considered appropriate?",
-            options: [
-                "Seizure disorders",
-                "Migraine",
-                "Allergic reactions",
-                "Hypertension"
-            ],
+            options: ["Seizure disorders", "Migraine", "Allergic reactions", "Hypertension"],
             answer: 0
         },
         {
@@ -320,11 +626,7 @@
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "14. According to the 2023 updated AGS Beers Criteria®, if a healthcare professional decides to prescribe a sulfonylurea for diabetes management despite the associated risks, which type of sulfonylurea is preferred to minimize the risk of prolonged hypoglycemia?",
-            options: [
-                "Glipizide",
-                "Glyburide (Glibenclamide)",
-                "Glimepiride"
-            ],
+            options: ["Glipizide", "Glyburide (Glibenclamide)", "Glimepiride"],
             answer: 0
         },
         {
@@ -352,51 +654,25 @@
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "17. According to the AGS 2023 Updated AGS Beers Criteria*, of all the NSAIDs, ________ has the most adverse effects, including a higher risk of adverse CNS effects.",
-            options: [
-                "Etodolac",
-                "Flurbiprofen",
-                "Indomethacin",
-                "Diclofenac"
-            ],
+            options: ["Etodolac", "Flurbiprofen", "Indomethacin", "Diclofenac"],
             answer: 2
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "18. According to the 2023 updated AGS Beers Criteria, this analgesic is not effective in commonly used dosages and may have a higher risk of neurotoxicity, including delirium, than other opioids.",
-            options: [
-                "Hydrocodone",
-                "Meperidine",
-                "Oxycodone",
-                "Morphine"
-            ],
+            options: ["Hydrocodone", "Meperidine", "Oxycodone", "Morphine"],
             answer: 1
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "19. According to the 2023 updated AGS Beers Criteria, choose muscle relaxants that are known for poorly tolerated by older adults due to anticholinergic adverse effects, sedation, and increased risk of fractures.<br><br>1. Carisoprodol<br>2. Cyclobenzaprine<br>3. Methocarbamol",
-            options: [
-                "1",
-                "2",
-                "3",
-                "1, 2",
-                "1, 3",
-                "2, 3",
-                "1, 2, 3"
-            ],
+            options: ["1", "2", "3", "1, 2", "1, 3", "2, 3", "1, 2, 3"],
             answer: 6
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "20. According to the 2023 updated AGS Beers CriteriaⓇ, which medication brings a risk of fluid retention and heart failure?<br><br>1. Thiazolidinedione<br>2. Dihydropyridine CCB<br>3. NSAIDs, COX-2 inhibitors",
-            options: [
-                "1",
-                "2",
-                "3",
-                "1, 2",
-                "1, 3",
-                "2, 3",
-                "1, 2, 3"
-            ],
+            options: ["1", "2", "3", "1, 2", "1, 3", "2, 3", "1, 2, 3"],
             answer: 4
         },
         {
@@ -435,203 +711,114 @@
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "24. According to the 2023 updated AGS Beers CriteriaⓇ, what risk is associated with the concurrent use of RAS inhibitors with amiloride?",
-            options: [
-                "Hyperglycemia",
-                "Hyperkalemia",
-                "Hypercalcemia",
-                "Hypernatremia"
-            ],
+            options: ["Hyperglycemia", "Hyperkalemia", "Hypercalcemia", "Hypernatremia"],
             answer: 1
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "25. According to the 2023 updated AGS Beers Criteria, which of the following combination with warfarin is NOT associated with an increased risk of bleeding?",
-            options: [
-                "Amiodarone",
-                "Trimethoprim-sulfamethoxazole",
-                "Azithromycin",
-                "Ibuprofen"
-            ],
+            options: ["Amiodarone", "Trimethoprim-sulfamethoxazole", "Azithromycin", "Ibuprofen"],
             answer: 2
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "26. According to the 2023 updated AGS Beers Criteria, increased risk of fall and of fracture with concurrent use of:<br><br>1. Antiepileptics and Antidepressants<br>2. Antipsychotics and Benzodiazepines<br>3. Opioids and Skeletal muscle relaxants",
-            options: [
-                "1",
-                "2",
-                "3",
-                "1, 2",
-                "1, 3",
-                "2, 3",
-                "1, 2, 3"
-            ],
+            options: ["1", "2", "3", "1, 2", "1, 3", "2, 3", "1, 2, 3"],
             answer: 6
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "27. According to the 2023 updated AGS Beers Criteria, which statement(s) is (are) true regarding adjustment with varying levels of kidney function in older adults?<br><br>1. Nitrofurantoin: avoid if CrCl < 30ml/min<br>2. Trimethoprim-sulfamethoxazole: reduce dosage if CrCl is 15-29ml/min<br>3. Ciprofloxacin dosage used to treat common infections typically require reduction when CrCl < 30ml/min",
-            options: [
-                "1",
-                "2",
-                "3",
-                "1, 2",
-                "1, 3",
-                "2, 3",
-                "1, 2, 3"
-            ],
+            options: ["1", "2", "3", "1, 2", "1, 3", "2, 3", "1, 2, 3"],
             answer: 6
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "28. According to the AGS 2023 Updated AGS Beers Criteria®, choose the drugs with strong anticholinergic properties.<br><br>1. Chlorpheniramine<br>2. Oxybutynin<br>3. Olanzapine",
-            options: [
-                "1",
-                "2",
-                "3",
-                "1, 2",
-                "1, 3",
-                "2, 3",
-                "1, 2, 3"
-            ],
+            options: ["1", "2", "3", "1, 2", "1, 3", "2, 3", "1, 2, 3"],
             answer: 6
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "29. According to the 2023 STOPP/START criteria version 3: Which medication is inappropriate for older adults with a history of peptic ulcer disease unless given with a PPI?",
-            options: [
-                "Gabapentin",
-                "Paracetamol",
-                "Ibuprofen",
-                "Codeine"
-            ],
+            options: ["Gabapentin", "Paracetamol", "Ibuprofen", "Codeine"],
             answer: 2
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "30. According to the 2023 STOPP/START criteria version 3: Which anticholinergic drug should be avoided in older adults with chronic constipation?",
-            options: [
-                "Tamsulosin",
-                "Oxybutynin",
-                "Finasteride",
-                "Doxazosin"
-            ],
+            options: ["Tamsulosin", "Oxybutynin", "Finasteride", "Doxazosin"],
             answer: 1
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "31. According to the 2023 STOPP/START criteria version 3: Which medication is inappropriate for older adults with a history of hyponatremia?",
-            options: [
-                "Amlodipine",
-                "Carbamazepine",
-                "Aspirin",
-                "Metoprolol"
-            ],
+            options: ["Amlodipine", "Carbamazepine", "Aspirin", "Metoprolol"],
             answer: 1
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "32. According to the 2023 STOPP/START criteria version 3: Which medication is inappropriate for older adults with a history of urinary retention?",
-            options: [
-                "Amitriptyline",
-                "Metformin",
-                "Paracetamol",
-                "Losartan"
-            ],
+            options: ["Amitriptyline", "Metformin", "Paracetamol", "Losartan"],
             answer: 0
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "33. According to the 2023 STOPP/START criteria version 3: Which medication should be avoided in older adults with a history of osteoporosis due to increased fracture risk?",
-            options: [
-                "Amlodipine",
-                "Metformin",
-                "Paracetamol",
-                "Prednisolone (long-term)"
-            ],
+            options: ["Amlodipine", "Metformin", "Paracetamol", "Prednisolone (long-term)"],
             answer: 3
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "34. According to the 2023 STOPP/START criteria version 3: Which medication should not be used in older adults with a history of chronic constipation?",
-            options: [
-                "Bisoprolol",
-                "Amlodipine",
-                "Ramipril",
-                "Verapamil"
-            ],
+            options: ["Bisoprolol", "Amlodipine", "Ramipril", "Verapamil"],
             answer: 3
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "35. Which medication is inappropriate for older adults with a history of Parkinson's disease due to risk of worsening symptoms?",
-            options: [
-                "Aspirin",
-                "Metoclopramide",
-                "Paracetamol",
-                "Domperidone"
-            ],
+            options: ["Aspirin", "Metoclopramide", "Paracetamol", "Domperidone"],
             answer: 1
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "36. According to the 2023 STOPP/START criteria version 3: Which medication is considered potentially inappropriate (STOPP) for heart failure with normal systolic ventricular function?",
-            options: [
-                "Digoxin",
-                "Furosemide",
-                "Bisoprolol",
-                "Ramipril"
-            ],
+            options: ["Digoxin", "Furosemide", "Bisoprolol", "Ramipril"],
             answer: 0
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "37. According to the 2023 STOPP/START criteria version 3: Which medication should be avoided in patients with bradycardia (< 50/min) due to risk of asystole?",
-            options: [
-                "Beta-blocker",
-                "Statin",
-                "Aspirin",
-                "Metformin"
-            ],
+            options: ["Beta-blocker", "Statin", "Aspirin", "Metformin"],
             answer: 0
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "38. According to the 2023 STOPP/START criteria version 3: Which medication should be avoided in patients with known QTc prolongation?",
-            options: [
-                "Amlodipine",
-                "Citalopram (> 20 mg/day)",
-                "Metformin",
-                "Losartan"
-            ],
+            options: ["Amlodipine", "Citalopram (> 20 mg/day)", "Metformin", "Losartan"],
             answer: 1
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "39. According to the 2023 STOPP/START criteria version 3: Which combination should be avoided due to risk of hyperkalaemia without regular potassium monitoring?",
-            options: [
-                "Statin and ezetimibe",
-                "Metformin and sitagliptin",
-                "ACE inhibitor and amiloride",
-                "Aspirin and paracetamol"
-            ],
+            options: ["Statin and ezetimibe", "Metformin and sitagliptin", "ACE inhibitor and amiloride", "Aspirin and paracetamol"],
             answer: 2
         },
         {
             guideline: "[2025 임상약동학 5-2 Geriatrics]",
             text: "40. According to the 2023 STOPP/START criteria version 3: Which class of drugs should not be prescribed for chronic constipation in older adults due to risk of electrolyte imbalance?",
-            options: [
-                "Stool softeners",
-                "Bulk-forming laxatives",
-                "Stimulant laxatives",
-                "Osmotic laxatives"
-            ],
+            options: ["Stool softeners", "Bulk-forming laxatives", "Stimulant laxatives", "Osmotic laxatives"],
             answer: 2
         }
     ];
 
-    // 퀴즈 라이브러리 목록
+    // 퀴즈 라이브러리 목록 (모든 퀴즈 포함)
     const quizLibrary = [
+        {
+            id: 'pk_mid_2025',
+            title: '2025 임상약동학 중간 퀴즈 (45문항)',
+            data: midQuizData
+        },
         {
             id: 'pk_geriatrics_2025',
             title: '2025 임상약동학 5-2 Geriatrics 퀴즈 (40문항)',
@@ -742,32 +929,20 @@
         const container = document.getElementById('options-container');
         container.innerHTML = '';
         
-        if (q.type === 'essay') {
-            const area = document.createElement('textarea');
-            area.className = 'essay-input';
-            area.placeholder = '답안을 입력하세요...';
-            area.value = userAnswers[index] || '';
-            area.oninput = (e) => {
-                userAnswers[currentQuestion] = e.target.value.trim() || null;
+        q.options.forEach((optText, optIdx) => {
+            const label = document.createElement('label');
+            label.className = 'option-label' + (userAnswers[currentQuestion] === optIdx ? ' selected' : '');
+            label.innerHTML = `
+                <input type="radio" name="quiz-option" value="${optIdx}" ${userAnswers[currentQuestion] === optIdx ? 'checked' : ''}>
+                <span><strong>${optIdx + 1}.</strong> ${optText}</span>
+            `;
+            label.onclick = () => {
+                userAnswers[currentQuestion] = optIdx;
                 renderNavGrid();
+                renderQuestion(currentQuestion);
             };
-            container.appendChild(area);
-        } else {
-            q.options.forEach((optText, optIdx) => {
-                const label = document.createElement('label');
-                label.className = 'option-label' + (userAnswers[currentQuestion] === optIdx ? ' selected' : '');
-                label.innerHTML = `
-                    <input type="radio" name="quiz-option" value="${optIdx}" ${userAnswers[currentQuestion] === optIdx ? 'checked' : ''}>
-                    <span><strong>${optIdx + 1}.</strong> ${optText}</span>
-                `;
-                label.onclick = () => {
-                    userAnswers[currentQuestion] = optIdx;
-                    renderNavGrid();
-                    renderQuestion(currentQuestion);
-                };
-                container.appendChild(label);
-            });
-        }
+            container.appendChild(label);
+        });
         
         document.getElementById('prev-btn').style.visibility = index === 0 ? 'hidden' : 'visible';
         const next = document.getElementById('next-btn');
@@ -793,16 +968,7 @@
     }
 
     function retryIncorrect() {
-        const incorrect = activeQuizData.filter((q, i) => {
-            if (q.type === 'essay') {
-                const u = (userAnswers[i] || '').toLowerCase().replace(/\s+/g, '');
-                const c = q.options[q.answer].toLowerCase().replace(/\s+/g, '');
-                return u !== c;
-            } else {
-                return userAnswers[i] !== q.answer;
-            }
-        });
-        
+        const incorrect = activeQuizData.filter((q, i) => userAnswers[i] !== q.answer);
         if (incorrect.length === 0) return alert('모두 정답입니다!');
         activeQuizData = incorrect;
         resetQuizState();
@@ -823,22 +989,11 @@
         let score = 0;
 
         activeQuizData.forEach((q, i) => {
-            let correct = false;
+            const correct = userAnswers[i] === q.answer;
+            const cText = `${q.answer + 1}. ${q.options[q.answer]}`;
             let uText = '응답 안 함';
-            let cText = '';
-
-            if (q.type === 'essay') {
-                cText = q.options[q.answer];
-                const u = (userAnswers[i] || '').toLowerCase().replace(/\s+/g, '');
-                const c = cText.toLowerCase().replace(/\s+/g, '');
-                correct = u !== '' && u === c;
-                uText = userAnswers[i] || '응답 안 함';
-            } else {
-                correct = userAnswers[i] === q.answer;
-                cText = `${q.answer + 1}. ${q.options[q.answer]}`;
-                if (userAnswers[i] !== null) {
-                    uText = `${userAnswers[i] + 1}. ${q.options[userAnswers[i]]}`;
-                }
+            if (userAnswers[i] !== null) {
+                uText = `${userAnswers[i] + 1}. ${q.options[userAnswers[i]]}`;
             }
             
             if (correct) score++;
