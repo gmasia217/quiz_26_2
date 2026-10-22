@@ -168,7 +168,7 @@
 </div>
 
 <script>
-    // 1. 2024 기초약무실습 중간고사 퀴즈 데이터 (30문항)[cite: 27]
+    // 1. 2024 기초약무실습 중간고사 퀴즈 데이터 (30문항)
     const mid2024QuizData = [
         {
             guideline: "[2024 기초약무실습 중간]",
@@ -455,6 +455,53 @@
         ["Valsartan", "고혈압, 심부전"], ["Clopidogrel", "심근경색, 뇌졸중, 관상동맥질환등 혈전 색전 예방"], ["Metformin", "당뇨병"], ["Isotretionin", "여드름"], ["Alendronate", "골다공증 치료제"], ["Salmeterol", "천식, COPD - LABA"], ["Pseudoephedrine", "코막힘, 비충혈완화"], ["Lactulose", "변비"], ["Almagate", "위산과다, 위 십이지장 궤양, 위염"], ["Simethicone", "복부팽만, 가스제거"], ["Nystatin", "구강 장 피부 칸디다증"], ["Albendazole", "회충 요충 촌충 등 기생충 감염"], ["Finasteride", "전립선비대증, 남성형 탈모"], ["Mupirocin", "피부세균감염"], ["Loperamide", "급성 만성 설사증상 완화"], ["Valproate", "간질, 양극성 장애의 조절 조증"], ["Guaifenasin", "가래 - 거담제"], ["Glimepiride", "당뇨"], ["Baclofen", "척수성 다발성경하증"], ["Cefaclor", "호흡기, 요로, 피부 등 세균감염"], ["Ethambutol", "결핵치료"], ["Itraconazole", "피부, 손발톱진균증 진균감염"], ["Losartan", "고혈압, 심부전"], ["Bromhexine", "기관지염, 가래 배출"]
     ];
 
+    // 새롭게 추가된 '다빈도 의약품 전체 정리 (261009)' 데이터 세트
+    const set_261009 = [
+        ["Almagate", "위산과다, 위·십이지장궤양, 위염"],
+        ["Nintedanib", "특발성 폐섬유증, 전신경화증 연관 간질성폐질환"],
+        ["Pantoprazole", "위식도역류질환(GERD), 소화성궤양, 졸링거-엘리슨 증후군"],
+        ["Desloratadine", "알레르기성 비염, 만성 특발성 두드러기"],
+        ["Allopurinol", "통풍, 고요산혈증"],
+        ["Salbutamol", "천식, 만성폐쇄성폐질환(COPD)의 호흡곤란 완화"],
+        ["Amlodipine", "고혈압, 관상동맥질환(협심증)"],
+        ["Valsartan", "고혈압, 심부전, 심근경색 후 생존율 향상"],
+        ["Losartan", "고혈압, 제2형 당뇨병성 신증"],
+        ["Cimetidine", "위·십이지장궤양, 역류성식도염"],
+        ["Glimepiride", "제2형 당뇨병"],
+        ["Dapagliflozin", "제2형 당뇨병, 심부전, 만성콩팥병"],
+        ["Cholecalciferol", "비타민 D 결핍, 골다공증 예방 및 치료"],
+        ["Indacaterol", "만성폐쇄성폐질환(COPD)의 유지요법 기관지확장제"],
+        ["Clopidogrel", "동맥경화성 혈전증(심근경색, 뇌졸중) 예방"],
+        ["Amiodarone", "심실성 및 심방성 부정맥 치료"],
+        ["Ivabradine", "만성 안정형 협심증, 만성 심부전"],
+        ["Cisplatin", "위암, 폐암, 난소암, 고환암 등 고형암 항암제"],
+        ["Levothyroxine", "갑상선 기능 저하증"],
+        ["Methimazole", "갑상선 기능 항진증(그레이브스병)"],
+        ["Cefaclor", "호흡기 감염증, 요로 감염증, 피부 감염증 항균제"],
+        ["Caspofungin", "침습성 칸디다증, 아스페르길루스증 등 항진균제"],
+        ["Cefotaxime", "패혈증, 뇌수막염, 복강내 감염 항균제"],
+        ["Ceftriaxone", "수막염, 폐렴, 요로감염 등 중증 세균 감염 항균제"],
+        ["Cefuroxime", "호흡기 감염, 요로 감염 항균제"],
+        ["Tacrolimus", "장기이식(신장·간장) 거부반응 억제, 아토피피부염"],
+        ["Tamoxifen", "유방암 치료 및 재발 예방"],
+        ["Sulindac", "류마티스 관절염, 골관절염, 강직척추염 (NSAID)"],
+        ["Ketoprofen", "관절염, 근육통, 외상 후 소염진통"],
+        ["Ibandronate", "폐경기 여성의 골다공증 치료 및 예방"],
+        ["Fentanyl", "중증 만성 통증 조절 (마약성 진통제)"],
+        ["Ketamine", "전신마취 유도 및 유지, 진통 보조"],
+        ["Gabapentin", "신경병증성 통증, 부분발작 보조치료"],
+        ["Carbamazepine", "뇌전증(간질), 삼차신경통, 양극성장애"],
+        ["Lamotrigine", "뇌전증 발작, 양극성장애(조증 삽화 지연)"],
+        ["Topiramate", "뇌전증 치료, 편두통 예방"],
+        ["Sevelamer", "만성신부전 환자의 고인산혈증 혈중 인 조절"],
+        ["Donepezil", "알츠하이머병으로 인한 치매 증상 완화"],
+        ["Pseudoephedrine", "코막힘, 비충혈 완화"],
+        ["Fluticasone", "천식, 알레르기 비염, 만성폐쇄성폐질환(COPD)"],
+        ["Tiotropium", "만성폐쇄성폐질환(COPD) 및 천식의 유지요법"],
+        ["Latanoprost", "개방각 녹내장, 고안압증 치료"],
+        ["Etanercept", "류마티스 관절염, 강직척추염, 건선성 관절염"]
+    ];
+
     // 4. 데이터를 서술형 퀴즈 포맷으로 변환하는 공통 함수
     function formatQuizData(dataArray, guidelineTitle) {
         return dataArray.map((item, index) => {
@@ -468,8 +515,13 @@
         });
     }
 
-    // 5. 전체 퀴즈 라이브러리 구성 (기존 퀴즈 유지 + 2024 기초약무실습 중간 추가)
+    // 5. 전체 퀴즈 라이브러리 구성 (기존 모든 퀴즈 유지 + '다빈도 의약품 전체 정리 (261009)' 추가)
     const quizLibrary = [
+        {
+            id: 'quiz_261009',
+            title: '다빈도 의약품 전체 정리 (261009)',
+            data: formatQuizData(set_261009, "다빈도 의약품 전체 정리 (261009)")
+        },
         {
             id: 'quiz_2024_mid',
             title: '2024 기초약무실습 중간',
