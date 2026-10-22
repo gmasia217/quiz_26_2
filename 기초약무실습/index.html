@@ -65,6 +65,10 @@
     .question-box { flex-grow: 1; background-color: #f0f7ff; border: 1px solid #cce1ff; padding: 20px; border-radius: 4px; }
     .guideline-text { font-weight: bold; margin-bottom: 15px; font-size: 14px; color: #0d6efd; }
     .question-text { font-size: 15px; margin-bottom: 20px; line-height: 1.5; }
+    .option-label { display: flex; align-items: flex-start; padding: 12px 15px; margin-bottom: 10px; background-color: #ffffff; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; transition: background-color 0.15s, border-color 0.15s; line-height: 1.4; font-size: 14px; }
+    .option-label:hover { background-color: #e9ecef; }
+    .option-label.selected { background-color: #e7f5ff; border-color: #0d6efd; font-weight: bold; }
+    .option-label input[type="radio"] { margin-right: 12px; margin-top: 2px; accent-color: #0d6efd; transform: scale(1.1); }
     .essay-input { width: 100%; height: 120px; padding: 15px; border: 1px solid #ced4da; border-radius: 4px; font-size: 15px; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.5; }
     .essay-input:focus { outline: none; border-color: #0d6efd; box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); }
     .clear-choice { display: inline-block; margin-top: 15px; color: #0d6efd; cursor: pointer; font-size: 14px; }
@@ -117,7 +121,7 @@
 <div class="main-content">
     <div class="breadcrumb">
         <a href="../index.html">🏠 홈</a> / <span class="breadcrumb-link" onclick="showDashboard()">기초약무실습</span> / <span id="breadcrumb-current">퀴즈 목록</span>
-        <span id="mode-indicator" style="font-weight:bold; color:#0d6efd; margin-left:10px; display:none;">[서술형 퀴즈]</span>
+        <span id="mode-indicator" style="font-weight:bold; color:#0d6efd; margin-left:10px; display:none;">[퀴즈 풀이]</span>
     </div>
 
     <div id="dashboard-container">
@@ -137,7 +141,7 @@
                 <div class="guideline-text" id="guideline-display"></div>
                 <div class="question-text" id="q-text-display">Question text goes here</div>
                 <div id="options-container"></div>
-                <div class="clear-choice" onclick="clearChoice()">Clear my choice / 입력 지우기</div>
+                <div class="clear-choice" onclick="clearChoice()">Clear my choice / 입력 및 선택 취소</div>
             </div>
         </div>
         <div class="nav-buttons">
@@ -152,7 +156,7 @@
             <span id="score-display" style="font-size: 18px; font-weight: bold;"></span>
         </div>
         <div id="essay-warning" style="color: #dc3545; font-size: 14px; margin-bottom: 20px; font-weight: bold;">
-            * 서술형 모드에서는 띄어쓰기나 대소문자, 단어 차이로 자동 오답 처리될 수 있습니다. 반드시 '모범 답안'과 눈으로 직접 비교해 보세요!
+            * 서술형 문항의 경우 띄어쓰기나 대소문자, 단어 차이로 자동 오답 처리될 수 있으니 '모범 답안'과 직접 비교해 보세요!
         </div>
         <div id="results-list"></div>
         <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
@@ -164,12 +168,269 @@
 </div>
 
 <script>
-    // 1. 기존 데이터 (198개)
+    // 1. 2024 기초약무실습 중간고사 퀴즈 데이터 (30문항)[cite: 27]
+    const mid2024QuizData = [
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "1. Which statement(s) is(are) true regarding importance of communication skills?<br><br>1. Enhanced communication has been found to be associated with patient satisfaction<br>2. Effective pharmacist communication has been shown to ensure optimal therapeutic outcomes<br>3. Improved communication with health care providers can have a positive effect on patients’ compliance with medication",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 6,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "2. Which of the following describes the feedback in the communication model?",
+            options: [
+                "The element that affects the accuracy of the communication exchange (Barrier)",
+                "The process whereby receivers communicate back to senders their understanding of the sender’s message (Feedback)",
+                "The element that is transmitted from one person to another (Message)",
+                "The one who transmits a message to another person (Sender)",
+                "The one who receives the message from the sender (Receiver)"
+            ],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "3. Which of the following is an example of nonverbal communication?",
+            options: ["Speaking clearly", "Making eye contact", "Using complex vocabulary"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "4. Which of the following statement is true regarding open and closed-ended questions?",
+            options: [
+                "An open-ended question can be answered with either a 'yes' or 'no' response",
+                "Open-ended questions enable patients to avoid specific subjects and emotional expression",
+                "Open-ended questions convey willingness to listen and more effective in assessing patient understanding"
+            ],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "5. Propranolol is commonly prescribed to patients with hyperthyroidism. What is the primary purpose of using propranolol in these patients?",
+            options: [
+                "To increase thyroid hormone production",
+                "To alleviate symptoms such as tachycardia and tremors",
+                "To reduce anxiety and improve sleep",
+                "To decrease blood pressure"
+            ],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "6. A 35-year-old female has been prescribed methotrexate for rheumatoid arthritis. What is the appropriate dosing interval?",
+            options: ["Once a day", "Once a week", "Twice a day", "Every other day"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "7. When cimetidine and itraconazole are taken together, what is the primary concern related to drug interaction?",
+            options: [
+                "Decreased effectiveness of cimetidine",
+                "Enhanced antifungal activity",
+                "Interfere with the absorption of itraconazole",
+                "Elevated risk of gastrointestinal adverse effects"
+            ],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "8. When prescribing isotretinoin to a woman of childbearing potential for the treatment of severe acne, what is the primary concern that healthcare providers must address before starting the medication?",
+            options: [
+                "Potential for allergic reactions to the medication",
+                "Dietary restrictions and potential vitamin deficiencies",
+                "Ensuring proper hydration during treatment",
+                "Risk of teratogenicity and the need for effective contraception"
+            ],
+            answer: 3,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "9. Which of the following is an important counseling point for a patient prescribed methylphenidate?",
+            options: [
+                "Avoid taking the medication in the evening to prevent insomnia",
+                "You can stop taking the medication suddenly if you feel better.",
+                "It is safe to share this medication with friends if they have similar symptoms.",
+                "Take the medication with a high-fat meal for better absorption."
+            ],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "10. What is the daily dosage in milliliters (mL) of 지스로맥스 건조시럽 (40mg/mL) for a 4-year-old boy weighing 16 kg, following the pediatric standard dosing of azithromycin at 10 mg/kg/day?",
+            options: ["1mL", "4mL", "6mL", "10mL"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "11. Which of the following routes is NOT commonly used for the administration of injectable drugs?",
+            options: ["PO", "SC", "IM", "IV"],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "12. What is the process of adding a solvent to powdered injectable drug to dissolve it called?",
+            options: ["Emulsification", "Reconstitution", "Filtration", "Dilution"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "13. Which of the following formulations should be prepared aseptically (sterile compounding)?",
+            options: [
+                "Intravenous injection preparation",
+                "Oral (tablet) formulation",
+                "Topical ointment"
+            ],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "14. When checking a prescription prior to preparing an injectable medication, what aspects related to drug safety should be verified?<br><br>1. Expiration date<br>2. Storage conditions<br>3. Compatibility with the solution",
+            options: ["1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 3,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "15. What pharmacokinetic parameter should be used when determining the dosage of carboplatin?",
+            options: [
+                "Volume of distribution (Vd)",
+                "Area under the curve (AUC)",
+                "Bioavailability",
+                "Half-life"
+            ],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "16. When administering oxaliplatin, which intravenous solution is required for dilution and should be used as a carrier solution?",
+            options: [
+                "Lactated Ringer’s solution",
+                "Normal saline (0.9% sodium chloride)",
+                "5% dextrose in water"
+            ],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "17. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Loratadine</span>",
+            options: ["알레르기성 비염, 두드러기 - 2세대 항히스타민제"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "18. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Darbepoetin</span>",
+            options: ["조혈제, erythropoiesis-stimulating agent (ESA)"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "19. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Nizatidine</span>",
+            options: ["H2 수용체 길항제 (H2-receptor antagonist)"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "20. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Ivabradine</span>",
+            options: ["만성안정형협심증, 만성심부전"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "21. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Diclofenac</span>",
+            options: ["경구용(전신작용): NSAID 국소용: 국소용 NSAID"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "22. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Lisinopril</span>",
+            options: ["ACEI (Angiotensin Converting Enzyme Inhibitor)"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "23. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Gentamicin</span>",
+            options: ["피부 감염 치료(외용): 세균감염증, aminoglycoside 항생제 전신 감염 치료(주사제): aminoglycoside 항생제 안과용: aminoglycoside 항생제"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "24. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Ergocalciferol</span>",
+            options: ["칼슘제"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "25. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Clotrimazole</span>",
+            options: ["피부진균증 – 외용 항진균제"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "26. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Acyclovir</span>",
+            options: ["구순포진, 대상포진 - 항바이러스제"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "27. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Levothyroxine</span>",
+            options: ["갑상선 기능 저하증"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "28. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Dapagliflozin</span>",
+            options: ["당뇨병 – SGLT2 억제제"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "29. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Docusate</span>",
+            options: ["하제, 완장제"],
+            answer: 0,
+            type: "essay"
+        },
+        {
+            guideline: "[2024 기초약무실습 중간]",
+            text: "30. 다음 약물의 임상용도를 쓰시오: <br><br><span style=\"font-size:20px; font-weight:bold; color:#d63384;\">Enoxaparin</span>",
+            options: ["항응고약, LMWH"],
+            answer: 0,
+            type: "essay"
+        }
+    ];
+
+    // 2. 기존 데이터 (198개)
     const drugData = [
         ["gabapentin", "신경통"], ["ganciclovir", "CMV 폐렴"], ["gentamicin", "복막염"], ["glimepiride", "2형 당뇨병"], ["nafcillin", "감염성 심내막염"], ["naloxone", "opioid 과다복용"], ["nystatin", "candida감염 치료"], ["nitroglycerin", "협심증"], ["nifedipine", "고혈압"], ["dabigatran", "deep vein thrombosis, pulmonary embolism 치료"], ["daunorubicin", "AML(급성골수성백혈병), 신경아세포증"], ["dapagliflozin", "2형 당뇨병"], ["dexamethasone", "류마티스성관절염의 항염증제, 알러지반응"], ["donepezil", "치매(알츠하이머병)"], ["dobutamine", "심부전"], ["docetaxel", "유방암, 폐암,등"], ["dopamine", "심부전"], ["Doxazosin", "혈압약"], ["Doxorubicin", "(주로 유방암, Metastatic cancer)"], ["Doxycycline", "항균제"], ["Domperidone", "위장운동장애"], ["Digoxin", "심부전"], ["Diazepam", "불안증"], ["Diclofenac", "통증, 편두통"], ["Diltiazem", "고혈압"], ["Lamotrigine", "항경련제"], ["Lamivudine", "B형 간염, HIV 감염"], ["Ramipril", "고혈압약"], ["Lactulose", "변비"], ["Lansoprazole", "소화성 궤양 치료제"], ["Levenorgestrel", "피임약"], ["Levodopa/ Carbidopa", "파킨슨병 치료제"], ["levosulpiride", "위장운동 장애"], ["levothyroxine", "갑상선 기능 저하증"], ["levofloxacin", "각막염, 결막염 항균제"], ["levetiracetam", "간질 치료제"], ["letrozole", "유방암 항암제"], ["lorazepam", "마취전/ 급성 불안, 흥분에 사용"], ["losartan", "고혈압"], ["rosuvastatin", "고지혈증"], ["roxithromycin", "편도염, 기관지염 등 호흡기 감염증"], ["linagliptin", "당뇨병 치료제"], ["rivaroxaban", "정맥혈전증, 폐색전증 치료"], ["ribavirin", "만성 C형 간염 치료제"], ["risperidone", "정신분열증, 우울, 불안 완화"], ["rituximab", "림프종, 만성구성 백혈병, 류마티스 관절염 치료제"], ["lithium", "조울증"], ["rifampicin", "항결핵제"], ["Megestrol", "암.AIDS의한 식욕부진(식욕촉진제), 재발성, 전이성, 수술불가 유방암, 자궁내막암 완화"], ["Meropenem", "(폐혈증, 호흡기감염, 요로감염증, 복막염 등의) 항균제"], ["Methylprednisolone", "습진, 아토피피부염"], ["Metoclopramide", "진토제"], ["Methotrexate", "급성백혈병, 비호지킨림프종 등 항암제"], ["Metronidazole", "(패혈증, 균혈증 등) 혐기성 감염증 항균제, (세균질염 등) 항진균제"], ["Metformin", "당뇨병 (경구용 혈당강하제)"], ["Methimazole", "갑상선항진증"], ["Methylphenidate", "ADHD (주의력결핍과잉행동장애)"], ["Mefenamic acid", "진통제(두통, 치통, 요통, 골관절염, 월경통 등)"], ["Immunoglobulin", "저 및 무감마글로불린혈증, 중증감염증(항생물질병용)"], ["Morphine", "마약성 진통제"], ["Moxifloxacin", "호흡기감염(급성부비동염, 폐렴), 합병 복강내 감염 항균제"], ["Montelukast", "천식, 알레르기비염"], ["Midazolam", "수면장애, 진정 목적"], ["Mycophenolate", "이식환자 급성장기 '이식거부반응 방지'"], ["Baclofen", "근육이완제"], ["Vancomycin", "항균제 (위막성장염, PMC)"], ["Valsartan", "고혈압제"], ["Valproic acid", "항경련제"], ["Verapamil", "고혈압, 협심증 치료제"], ["Betamethasone", "항염증제, 아토피성/접촉성 피부염"], ["Budesonide", "천식, 크론병, 궤양성 대장염"], ["Bicalutamide", "항암제"], ["Cyclosporine", "장기이식거부반응, 류마티스 관절염"], ["Salmeterol", "천식, COPD"], ["Salbutamol", "천식, COPD"], ["Sulfasalazine", "염증성 장질환, 류마티스 관절염"], ["Celecoxib", "소염진통제"], ["Cefazolin", "담즙관염의 항균제"], ["Cefaclor", "호흡기 감염, 위장관 감염의 항균제"], ["Cefepime", "복부내 감염, 폐렴의 항균제"], ["Cefotaxime", "뇌수막염, 호흡기 감염, 방광염, 위장관 감염"], ["Cefuroxime", "방광염"], ["Ceftriaxone", "뇌수막염, 호흡기 감염, 방광염, 위장관 감염"], ["Sumatriptan", "편두통 치료제"], ["Sucralfate", "소화성 궤양 치료제"], ["Pseudoephedrine", "코감기"], ["Streptokinase- streptodornase", "수술 및 외상 후 염증 완화, 부비동염, 혈정정맥염"], ["Spironolactone", "고혈압"], ["Cimetidine", "소화성궤양치료제"], ["Cisplatin", "위암, 폐암, 고환/전립선/난소/방광/자궁경부암"], ["Cyclophosphamide", "유방암"], ["Ciprofloxacin", "호흡기 감염, 위장관 감염, 방광염"], ["Sildenafil", "발기부전 치료제"], ["Simvastatin", "고지혈증 치료제"], ["Amantadine", "파킨슨병 치료제"], ["Amoxicillin", "생식기감염, 폐렴"], ["Amiodarone", "부정맥치료제"], ["Amikacin sulfate", "폐렴, 폐혈증, 복막염, 수막염, 요로감염 등 감염질환"], ["Amitriptyline", "우울증 치료제, 야뇨증"], ["Aceclofenac", "관절염, 척추염, 수술 후 통증, 요통 등"], ["Acyclovir", "생식기포진, 대상포진, 단순포진성 뇌염"], ["Azathioprine", "장기이식 후 감염예방, 자가면역질환"], ["Azithromycin", "호흡기감염, 중이염, 피부감염, 생식기감염"], ["Acarbose", "당뇨약"], ["Atenolol", "고혈압"], ["Atrovastatin", "고지혈증"], ["Atropine", "해독제, 진경제, 산동약"], ["Afloqualone", "마비, 다발성경화증 치료제"], ["Alendronate", "골다공증치료제"], ["Allopurinol", "통풍치료제"], ["Alverine", "과민성대장증후군 치료제"], ["Albumin", "저단백혈증, 혈액대용제 및 혈장단백질 분획제"], ["Alfuzosin", "전립선 비대증 치료제, 배뇨장애 치료제"], ["Alprazolam", "항불안제, 우울증, 수면장애, 공황장애 (수면진통제, 신경안정제)"], ["Amlodipine", "고혈압"], ["Amphotericin B", "심각한 진균증, 리슈만편모충증"], ["Ampicillin", "호흡기 감염증, UTI(요로기관감염증), 뇌수막염"], ["Enalapril", "고혈압"], ["Enoxaparin", "DVT(deep vein thrombosis), PE(pulmonary embolism)"], ["Erythropoietin", "빈혈치료제"], ["Ebastine", "비염, 알레르기"], ["Esomeprazole", "소화성궤양치료제"], ["Escitalopram", "항우울제"], ["Ethambutol", "항결핵제"], ["Epinephrine", "알러지성 과민반응, 저혈압/쇼크"], ["Entacapone", "파킨슨병 치료제"], ["Entecavir", "B형 간염"], ["Omeprazole", "소화성궤양 치료제"], ["Oxybutynin", "과민성 방광 치료제"], ["Oxycodone", "마약성 진통제"], ["Oxytocin", "자궁수축제 (자궁 수축 유발, 자궁 출혈 치료)"], ["Octreotide", "말단비대증 치료"], ["Ondansetron", "진토제(구토 예방 및 치료)"], ["Olanzapine", "비정형 항정신병약 (정신분열병, 양극성장애)"], ["Warfarin", "정맥혈전증, 색전성 심방세동, 폐동맥색전증, 관상동맥페색"], ["Imatinib", "표적치료 항암제 (만성골수성백혈병=CML)"], ["Imipenem / cilastatin", "기관지염, 폐렴, 방광염, 담낭염, 자궁내감염, 패혈증 등"], ["Isoniazide", "결핵"], ["Isosorbide 5-mononitrate", "관상동맥심질환, 협심증의 흉통, 심근경색, 만성심근기능부전"], ["Isosorbide dinitrate", "급성 심부전, 불안정형 협심증"], ["Isotretinoin", "여드름 치료제"], ["Acitretin", "건선 치료제"], ["Itraconazole", "칸디다성 질염, 피부사상균증, 진균성 각막염, 구강 칸디다증"], ["Ifosfamide", "항암제"], ["Ipratropium", "기도폐쇄 장애에 의한 호흡곤란 증상 완화"], ["Insulin", "당뇨병약"], ["Zolpidem", "수면제"], ["carbamazepine", "(간질, 삼차 신경통의) 항경련제"], ["carvedilol", "고혈압, 협심증 치료제"], ["carboplatin", "(주로 난소암, 소세포폐암의) 항암제"], ["capecitabine", "(주로 결장직장암, 유방암, 위암의) 항암제"], ["calcitriole", "(경구, 주사제-신기능 저하 환자의 골질환치료, 부갑상선 기능이상 치료) (외용제-건선 치료제) 비타민D제제"], ["captopril", "고혈압"], ["ketorolac", "진통제"], ["codeine", "마약성 진통제, 진해제"], ["colchicine", "통풍 치료제"], ["quetiapine", "(정신분열증의) 비정형 항정신병약"], ["clarithromycin", "(상하기도감염, 피부감염 등의) 항균제"], ["clonazepam", "(간질의) 항경련제, BZD계 수면진통제 및 신경안정제"], ["clozapine", "(정신분열증의) 비정형 항정신병약"], ["clopidogrel", "항혈전제, 혈소판응집억제제"], ["clindamycin", "항균제"], ["tamoxifen", "(유방암의) 호르몬성 항암제"], ["tacrolimus", "(장기이식거부반응) 면역억제제"], ["tamsulosin", "양성 전립선 비대증"], ["theophylline", "기관지 확장제"], ["tobramycin", "항균제"], ["tramadol", "중추성 진통제"], ["trastuzumab", "표적치료 항암제"], ["tiotropium", "기관지 확장제"], ["ticagrelor", "심근경색, 뇌졸중, 혈소판응집억제제"], ["paroxetine", "항우울, 항불안제"], ["famotidine", "소화성궤양치료제"], ["paclitaxel", "항암제"], ["pantoprazole", "소화성궤양치료제"], ["phenobarbital", "항경련제"], ["phenytoin", "항경련제"], ["pethidine", "마약성 진통제"], ["fentanyl", "마약성 진통제, 전신마취제"], ["formoterol", "기관지 확장제"], ["furosemide", "고혈압약"], ["prasugrel", "(불안정형 협심증 환자, STEMI환자의 항혈전제) 혈소판응집억제제"], ["pregabalin", "부분 발작 보조제"], ["prednisolone", "항염증제, 면역억제제"], ["propofol", "정맥 마취제"], ["propranolol", "고혈압, 협심증, 부정맥 치료제"], ["flumazenil", "벤조다이아제핀계 약물의 중추진정작용 역전"], ["fluorometholone", "항염증제"], ["fluorouracil", "세포독성 항암제"], ["fluoxetine", "우울증, 월경전 불쾌장애"], ["fluconazole", "항진균제"], ["finasteride", "양성 전립선 비대증, 탈모치료제"], ["pyrazinamide", "항결핵제"], ["piperacillin/tazobactam", "(폐렴, 복막염 등의) 항균제"], ["pioglitazone", "당뇨병약"], ["hydroxyzine", "알러지약"], ["heparin", "폐색전증, 심부정맥 혈전증(DVT) 등에 쓰이는 항응고제"], ["hydrochlorothiazide", "고혈압약"]
     ];
 
-    // 2. 추가 데이터 세트 정의
+    // 3. 기타 데이터 세트 정의
     const set_2024_re = [
         ["loratadine", "알레르기성 비염, 두드레기"], ["ivabradine", "협심증,만성 심부전에서 심박수 감소용"], ["etarnercept", "류마티스 관절염, 강직척추염"], ["fluticasone", "천식,알레르기 비염, 만성폐쇄성폐질환(COPD)"], ["tiotropium", "만성폐쇄성폐질환(COPD), 천식"], ["escitalopram", "주요우울장애, 범불안장애, 강박장애"], ["levothyroxine", "갑상선기능저하증"], ["liraglutade", "제2형 당뇨병"], ["diclofenac", "류마티스 관절염, 근골격계 통증"], ["cholecalciferol", "비타민 D 결핍, 골다공증 예방 및 치료"], ["ambroxol", "거담제로 기관지염, 천식"], ["bisacodyl", "변비"], ["ribaroxaban", "심부정맥혈전증(DVT), 폐색전증(PE), 심방세동의 뇌졸중예방"], ["furosemide", "심부전,고혈압"], ["sevelamer", "만성신부전 환자의 고인산혈증 조절"], ["azythromycin", "세균성감염(호흡기, 피부, 생식기), 클라미디아감염"], ["amphotericin b", "전신성 진균감염(칸디다증)"], ["tacrolimus", "장기이식 후 거부반응 억제, 아토피피부염"], ["famciclovir", "생식기 헤르페스 감염, 대상포진"], ["risendronate", "골다공증 치료 및 예방"], ["varenicline", "금연 보조요법(니코틴 의존성 치료)"], ["lamotrigine", "간질,양극성장애(조증예방)"], ["allopurinol", "통풍,고요산혈증"], ["oxycodone", "마약성 진통제로 중등도 – 중증 통증 완화"], ["darbopetin", "만성신부전, 빈혈치료(적혈구 생선촉진제)"]
     ];
@@ -194,7 +455,7 @@
         ["Valsartan", "고혈압, 심부전"], ["Clopidogrel", "심근경색, 뇌졸중, 관상동맥질환등 혈전 색전 예방"], ["Metformin", "당뇨병"], ["Isotretionin", "여드름"], ["Alendronate", "골다공증 치료제"], ["Salmeterol", "천식, COPD - LABA"], ["Pseudoephedrine", "코막힘, 비충혈완화"], ["Lactulose", "변비"], ["Almagate", "위산과다, 위 십이지장 궤양, 위염"], ["Simethicone", "복부팽만, 가스제거"], ["Nystatin", "구강 장 피부 칸디다증"], ["Albendazole", "회충 요충 촌충 등 기생충 감염"], ["Finasteride", "전립선비대증, 남성형 탈모"], ["Mupirocin", "피부세균감염"], ["Loperamide", "급성 만성 설사증상 완화"], ["Valproate", "간질, 양극성 장애의 조절 조증"], ["Guaifenasin", "가래 - 거담제"], ["Glimepiride", "당뇨"], ["Baclofen", "척수성 다발성경하증"], ["Cefaclor", "호흡기, 요로, 피부 등 세균감염"], ["Ethambutol", "결핵치료"], ["Itraconazole", "피부, 손발톱진균증 진균감염"], ["Losartan", "고혈압, 심부전"], ["Bromhexine", "기관지염, 가래 배출"]
     ];
 
-    // 3. 데이터를 서술형 퀴즈 포맷으로 변환하는 공통 함수
+    // 4. 데이터를 서술형 퀴즈 포맷으로 변환하는 공통 함수
     function formatQuizData(dataArray, guidelineTitle) {
         return dataArray.map((item, index) => {
             return {
@@ -207,8 +468,13 @@
         });
     }
 
-    // 4. 전체 퀴즈 라이브러리 구성
+    // 5. 전체 퀴즈 라이브러리 구성 (기존 퀴즈 유지 + 2024 기초약무실습 중간 추가)
     const quizLibrary = [
+        {
+            id: 'quiz_2024_mid',
+            title: '2024 기초약무실습 중간',
+            data: mid2024QuizData
+        },
         {
             id: 'drug_indication_quiz',
             title: '전문의약품 적응증 전체 퀴즈 (198개)',
@@ -268,7 +534,7 @@
             card.className = 'quiz-card';
             card.innerHTML = `
                 <h3>${quiz.title}</h3>
-                <p>총 ${quiz.data.length}문항 (전체 서술형)</p>
+                <p>총 ${quiz.data.length}문항</p>
                 <button class="btn btn-primary" onclick="startQuiz('${quiz.id}')">이 퀴즈 풀기</button>
             `;
             grid.appendChild(card);
@@ -343,22 +609,38 @@
         document.getElementById('q-status-display').innerText = hasAns ? 'Complete' : 'Not yet answered';
         document.getElementById('flag-btn-display').innerHTML = flaggedQuestions[index] ? '🚩 Remove flag' : '🚩 Flag question';
         
-        let guidelineText = q.guideline || '';
-        document.getElementById('guideline-display').innerHTML = guidelineText;
+        document.getElementById('guideline-display').innerHTML = q.guideline || '';
         document.getElementById('q-text-display').innerHTML = q.text;
         
         const container = document.getElementById('options-container');
         container.innerHTML = '';
         
-        const area = document.createElement('textarea');
-        area.className = 'essay-input';
-        area.placeholder = '박스 안에 적응증을 입력하세요...';
-        area.value = userAnswers[index] || '';
-        area.oninput = (e) => {
-            userAnswers[currentQuestion] = e.target.value.trim() || null;
-            renderNavGrid();
-        };
-        container.appendChild(area);
+        if (q.type === 'multiple') {
+            q.options.forEach((optText, optIdx) => {
+                const label = document.createElement('label');
+                label.className = 'option-label' + (userAnswers[currentQuestion] === optIdx ? ' selected' : '');
+                label.innerHTML = `
+                    <input type="radio" name="quiz-option" value="${optIdx}" ${userAnswers[currentQuestion] === optIdx ? 'checked' : ''}>
+                    <span><strong>${optIdx + 1}.</strong> ${optText}</span>
+                `;
+                label.onclick = () => {
+                    userAnswers[currentQuestion] = optIdx;
+                    renderNavGrid();
+                    renderQuestion(currentQuestion);
+                };
+                container.appendChild(label);
+            });
+        } else {
+            const area = document.createElement('textarea');
+            area.className = 'essay-input';
+            area.placeholder = '박스 안에 답을 입력하세요...';
+            area.value = userAnswers[index] || '';
+            area.oninput = (e) => {
+                userAnswers[currentQuestion] = e.target.value.trim() || null;
+                renderNavGrid();
+            };
+            container.appendChild(area);
+        }
         
         document.getElementById('prev-btn').style.visibility = index === 0 ? 'hidden' : 'visible';
         const next = document.getElementById('next-btn');
@@ -366,15 +648,32 @@
         next.onclick = index === activeQuizData.length - 1 ? showResults : () => { currentQuestion++; renderQuestion(currentQuestion); };
     }
 
-    function clearChoice() { userAnswers[currentQuestion] = null; renderQuestion(currentQuestion); }
-    function changeQuestion(s) { currentQuestion += s; renderQuestion(currentQuestion); }
-    function toggleFlag() { flaggedQuestions[currentQuestion] = !flaggedQuestions[currentQuestion]; renderQuestion(currentQuestion); }
+    function clearChoice() { 
+        userAnswers[currentQuestion] = null; 
+        renderNavGrid();
+        renderQuestion(currentQuestion); 
+    }
+    
+    function changeQuestion(s) { 
+        currentQuestion += s; 
+        renderQuestion(currentQuestion); 
+    }
+    
+    function toggleFlag() { 
+        flaggedQuestions[currentQuestion] = !flaggedQuestions[currentQuestion]; 
+        renderNavGrid();
+        renderQuestion(currentQuestion); 
+    }
 
     function retryIncorrect() {
         const incorrect = activeQuizData.filter((q, i) => {
-            const u = (userAnswers[i] || '').toLowerCase().replace(/\s+/g, '');
-            const c = q.options[q.answer].toLowerCase().replace(/\s+/g, '');
-            return u !== c;
+            if (q.type === 'multiple') {
+                return userAnswers[i] !== q.answer;
+            } else {
+                const u = (userAnswers[i] || '').toLowerCase().replace(/\s+/g, '');
+                const c = q.options[q.answer].toLowerCase().replace(/\s+/g, '');
+                return u !== c;
+            }
         });
         if (incorrect.length === 0) return alert('모두 정답입니다!');
         activeQuizData = incorrect;
@@ -397,33 +696,39 @@
 
         activeQuizData.forEach((q, i) => {
             let correct = false;
-            let uText = '응답 안 함';
-            const cText = q.options[q.answer];
-            
-            const u = (userAnswers[i] || '').toLowerCase().replace(/\s+/g, '');
-            const c = cText.toLowerCase().replace(/\s+/g, '');
-            correct = u !== '' && u === c;
-            uText = userAnswers[i] || '응답 안 함';
-            uText = uText.replace(/\n/g, '<br>');
+            let uText = '';
+            let cText = '';
+
+            if (q.type === 'multiple') {
+                correct = userAnswers[i] === q.answer;
+                cText = `${q.answer + 1}. ${q.options[q.answer]}`;
+                uText = userAnswers[i] !== null ? `${userAnswers[i] + 1}. ${q.options[userAnswers[i]]}` : '응답 안 함';
+            } else {
+                const uAns = (userAnswers[i] || '').trim();
+                const cAns = q.options[q.answer].trim();
+                correct = uAns.toLowerCase().replace(/\s+/g, '') === cAns.toLowerCase().replace(/\s+/g, '');
+                uText = uAns || '(작성하지 않음)';
+                cText = cAns;
+            }
             
             if (correct) score++;
             
             const item = document.createElement('div');
             item.className = `result-item ${correct ? 'correct' : 'incorrect'}`;
             
-            let statusHTML = `<span class="status-badge ${correct?'status-correct':'status-incorrect'}">${correct?'✔ 완전 일치':'✘ 직접 확인 필요 (불일치)'}</span>`;
+            let statusHTML = `<span class="status-badge ${correct ? 'status-correct' : 'status-incorrect'}">${correct ? '✔ 정답' : '✘ 오답'}</span>`;
 
             item.innerHTML = `
                 ${statusHTML}
-                <div style="font-size:14px; color:#0d6efd;">${q.guideline || ''}</div>
-                <div style="font-weight:bold; margin:10px 0;">${q.text}</div>
-                <div style="color:#6c757d;">나의 답:<br> <span style="display:inline-block; margin-top:5px; padding:10px; background:#f8f9fa; border:1px solid #dee2e6; width:100%; box-sizing:border-box;">${uText}</span></div>
-                <div style="color:#0d6efd; font-weight:bold; margin-top:10px;">모범 답안:<br> <span style="display:inline-block; margin-top:5px; padding:10px; background:#f0f7ff; border:1px solid #cce1ff; width:100%; box-sizing:border-box; color:#333;">${cText.replace(/\n/g, '<br>')}</span></div>
+                <div style="font-size:13px; color:#0d6efd; font-weight:bold;">${q.guideline || ''}</div>
+                <div style="font-weight:bold; margin:8px 0 15px 0;">${q.text}</div>
+                <div style="color:#6c757d; font-size:14px;">내가 작성한 답:<br> <span style="display:inline-block; margin-top:4px; padding:8px 12px; background:#f8f9fa; border:1px solid #dee2e6; border-radius:4px; width:100%; box-sizing:border-box; color:#333;">${uText}</span></div>
+                <div style="color:#0d6efd; font-weight:bold; font-size:14px; margin-top:10px;">정답 (모범 답안):<br> <span style="display:inline-block; margin-top:4px; padding:8px 12px; background:#f0f7ff; border:1px solid #cce1ff; border-radius:4px; width:100%; box-sizing:border-box; color:#333;">${cText}</span></div>
             `;
             list.appendChild(item);
         });
         
-        document.getElementById('score-display').innerText = `${activeQuizData.length}문항 중 ${score}문항 시스템 자동 정답 처리 (${Math.round(score/activeQuizData.length*100)}%)`;
+        document.getElementById('score-display').innerText = `${activeQuizData.length}문항 중 ${score}문항 정답 (${Math.round(score/activeQuizData.length*100)}%)`;
         document.getElementById('retry-incorrect-btn').style.display = score === activeQuizData.length ? 'none' : 'inline-block';
     }
 
