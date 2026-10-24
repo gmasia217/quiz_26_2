@@ -168,7 +168,363 @@
 </div>
 
 <script>
-    // 1. 2024 기초약무실습 중간고사 퀴즈 데이터 (30문항)
+    // 1. 2025 기초약무실습 중간고사 퀴즈 데이터 (40문항)[cite: 14]
+    const mid2025QuizData = [
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "1. A pharmacist is documenting a patient encounter using the SOAP note format. Which of the following correctly matches information to the proper section of the SOAP note?<br><br>1) Plan to discontinue antihypertensive medication - Objective<br>2) Hypertension likely due to poor adherence - Assessment<br>3) Patient reports dizziness after taking medication - Objective<br>4) Blood pressure 150/90 mmHg, pulse 96 bpm - Subjective",
+            options: ["1)", "2)", "3)", "4)"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "2. 처방전 발행 시 기재되어야 할 사항이 아닌 것은?",
+            options: [
+                "환자의 성명, 성별, 연령",
+                "질병분류기호",
+                "의약품명, 용량, 용법, 투여일수",
+                "의료기관명, 소재지, 전화번호, 의사명, 면허번호"
+            ],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "3. Which statement(s) is(are) true regarding importance of communication skills?<br><br>1. Enhanced communication has been found to be associated with patient satisfaction<br>2. Effective pharmacist communication has been shown to ensure optimal therapeutic outcomes<br>3. Improved communication with health care providers can have a positive effect on patients' compliance with medication",
+            options: ["1", "2", "3", "1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 6,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "4. Which of the following statement is true regarding open- and closed-ended questions?",
+            options: [
+                "Open-ended questions convey willingness to listen and more effective in assessing patient understanding",
+                "An open-ended question can be answered with either a \"yes\" or \"no\" response",
+                "Open-ended questions enable patients to avoid specific subjects and emotional expression."
+            ],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "5. Propranolol is commonly prescribed to patients with hyperthyroidism. What is the primary purpose of using propranolol in these patients?",
+            options: [
+                "To increase thyroid hormone production",
+                "To reduce anxiety and improve sleep",
+                "To decrease blood pressure",
+                "To alleviate symptoms such as tachycardia and tremors"
+            ],
+            answer: 3,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "6. A 35-year-old female has been prescribed methotrexate for rheumatoid arthritis. What is the appropriate dosing interval?",
+            options: ["Once a day", "Once a week", "Twice a day", "Every other day"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "7. When cimetidine and itraconazole are taken together, what is the primary concern related to drug interaction?",
+            options: [
+                "Interfere with the absorption of itraconazole",
+                "Decreased effectiveness of cimetidine",
+                "Elevated risk of gastrointestinal adverse effects",
+                "Enhanced antifungal activity"
+            ],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "8. When prescribing isotretinoin to a woman of childbearing potential for the treatment of severe acne, what is the primary concern that healthcare providers must address before starting the medication?",
+            options: [
+                "Dietary restrictions and potential vitamin deficiencies",
+                "Ensuring proper hydration during treatment",
+                "Risk of teratogenicity and the need for effective contraception",
+                "Potential for allergic reactions to the medication"
+            ],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "9. What is the daily dosage in milliliters (mL) of 지스로맥스 건조시럽 (40mg/mL) for a 4-year-old boy weighing 16 kg, following the pediatric standard dosing of azithromycin at 10 mg/kg/day?",
+            options: ["1 mL", "4 mL", "6 mL", "10 mL"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "10. A 6-year-old boy is diagnosed with community-acquired pneumonia. The physician prescribes doxycycline. What is the most appropriate pharmacist action?",
+            options: [
+                "Recommend doubling the dose",
+                "Dispense as prescribed",
+                "Contact the prescriber because doxycycline is contraindicated in children under 8 years",
+                "Substitute with tetracycline"
+            ],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "11. A 58-year-old woman with knee pain has been using ketorolac 10 mg PO TID for 10 days. Which DUR alert is appropriate?",
+            options: [
+                "Add another NSAID for better effect",
+                "Limit ketorolac use to ≤5 days (maximum 7 days) due to GI bleeding and ulcer risk",
+                "Continue therapy until pain subsides",
+                "Switch to IV route for chronic use"
+            ],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "12. A 63-year-old woman is receiving isoniazid, rifampin, and ethambutol for TB. Which additional medication should be prescribed to prevent peripheral neuropathy?",
+            options: ["Vitamin D", "Pyridoxine", "Thiamine", "Folic acid"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "13. A 72-year-old woman with rheumatoid arthritis is prescribed methotrexate weekly and folic acid 1 mg daily. What is the rationale for this combination?",
+            options: [
+                "Folic acid delays methotrexate elimination",
+                "Folic acid increases methotrexate absorption",
+                "Folic acid prevents hematologic and GI toxicity from folate antagonism",
+                "Folic acid enhances anti-inflammatory efficacy"
+            ],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "14. A 67-year-old postmenopausal woman with osteoporosis has a prescription for ibandronate 150 mg tablet once daily. Which DUR message should be triggered?",
+            options: [
+                "Ibandronate 150 mg should be taken once monthly.",
+                "Ibandronate should be taken once weekly",
+                "Ibandronate is given as an IV injection every 3 months",
+                "Ibandronate 150 mg daily is appropriate for severe osteoporosis"
+            ],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "15. A 60-year-old woman with hypothyroidism takes levothyroxine with breakfast and coffee every morning. Which counseling point is correct?",
+            options: [
+                "Take at bedtime with milk",
+                "Take levothyroxine on an empty stomach, 30-60 min before breakfast, with water only",
+                "Take with calcium supplements for better absorption",
+                "Take after meals to prevent GI upset"
+            ],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "16. A patient with chronic angina asks how to use nitroglycerin sublingual tablets during chest pain. Which instruction is most appropriate?",
+            options: [
+                "Chew and swallow for faster effect",
+                "Swallow one tablet with water every hour",
+                "Take one tablet every morning to prevent angina",
+                "Place one tablet under the tongue at onset; repeat every 5 minutes if needed, up to 3 doses."
+            ],
+            answer: 3,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "17. A chemotherapy order for a 45-year-old patient with lymphoma specifies vincristine 2 mg intrathecal injection. What should the pharmacist do?",
+            options: [
+                "Stop dispensing immediately and clarify with the prescriber",
+                "Prepare the dose using a spinal syringe",
+                "Substitute vinblastine",
+                "Dilute with saline for slow IV push"
+            ],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "18. Which of the following routes is NOT commonly used for the administration of injectable drugs?",
+            options: ["PO", "SC", "IV", "IM"],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "19. What is the process of adding a solvent to a powdered injectable drug to dissolve it called?",
+            options: ["Filtration", "Dilution", "Reconstitution", "Emulsification"],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "20. Which of the following formulations should be prepared aseptically (sterile compounding)?",
+            options: [
+                "Intravenous injection preparation",
+                "Oral (tablet) formulation",
+                "Topical ointment"
+            ],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "21. When checking a prescription prior to preparing an injectable medication, what aspects related to drug safety should be verified?<br><br>1. Expiration date<br>2. Storage conditions<br>3. Compatibility with the solution",
+            options: ["1, 2", "2, 3", "1, 3", "1, 2, 3"],
+            answer: 3,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "22. What pharmacokinetic parameter should be used when determining the dosage of Carboplatin?",
+            options: [
+                "Area Under the Curve (AUC)",
+                "Half-life",
+                "Bioavailability",
+                "Volume of Distribution (Vd)"
+            ],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "23. When administering oxaliplatin, which intravenous solution is required for dilution and should be used as a carrier solution?",
+            options: [
+                "Normal saline (0.9% sodium chloride)",
+                "Lactated Ringer's solution",
+                "5% dextrose in water"
+            ],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "24. What is the primary clinical use of Amlodipine?",
+            options: ["Hypertension", "Diabetes", "Asthma", "Infection"],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "25. Rosuvastatin is used for:",
+            options: ["Dyslipidemia", "Osteoporosis", "Insomnia", "GERD"],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "26. Metformin is indicated for:",
+            options: ["Hyperuricemia", "Hypertension", "Type 2 diabetes mellitus", "Depression"],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "27. Pantoprazole is commonly prescribed for:",
+            options: ["Allergy", "Depression", "Hypertension", "GERD"],
+            answer: 3,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "28. Furosemide is used to manage:",
+            options: ["Osteoporosis", "Edema", "Cough", "Insomnia"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "29. Pregabalin is used in:",
+            options: ["Allergies", "Obesity", "Depression", "Neuropathic pain"],
+            answer: 3,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "30. Donepezil is used for:",
+            options: ["Schizophrenia", "Parkinson's disease", "Alzheimer's disease", "Depression"],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "31. Amoxicillin / Clavulanate is used for:",
+            options: ["Fungal infections", "Parasitic infections", "Bacterial infections", "Viral infections"],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "32. Rivaroxaban is used for:",
+            options: ["Infection", "Anxiety", "GERD", "Thromboembolism"],
+            answer: 3,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "33. Tamsulosin is indicated for:",
+            options: ["BPH", "GERD", "DM", "COPD"],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "34. Celecoxib is prescribed for:",
+            options: ["Anxiety", "Osteoarthritis", "Asthma", "Infection"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "35. Escitalopram is mainly used for:",
+            options: ["Pain", "Schizophrenia", "Depression", "Constipation"],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "36. Lorazepam is used for:",
+            options: ["COPD", "Asthma", "Infection", "Anxiety"],
+            answer: 3,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "37. Dextromethorphan is used for:",
+            options: ["Cough suppression", "Diarrhea", "GERD", "Headache"],
+            answer: 0,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "38. Cetirizine is indicated for:",
+            options: ["Pain", "GERD", "Allergic conditions", "Hypertension"],
+            answer: 2,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "39. Loperamide is used for:",
+            options: ["Constipation", "Diarrhea", "Cough", "GERD"],
+            answer: 1,
+            type: "multiple"
+        },
+        {
+            guideline: "[2025 기초약무실습 중간]",
+            text: "40. Pseudoephedrine is used for:",
+            options: ["Epilepsy", "Analgesic", "Nasal decongestion", "Constipation"],
+            answer: 2,
+            type: "multiple"
+        }
+    ];
+
+    // 2. 2024 기초약무실습 중간고사 퀴즈 데이터 (30문항)
     const mid2024QuizData = [
         {
             guideline: "[2024 기초약무실습 중간]",
@@ -425,12 +781,12 @@
         }
     ];
 
-    // 2. 기존 데이터 (198개)
+    // 3. 기존 데이터 (198개)
     const drugData = [
         ["gabapentin", "신경통"], ["ganciclovir", "CMV 폐렴"], ["gentamicin", "복막염"], ["glimepiride", "2형 당뇨병"], ["nafcillin", "감염성 심내막염"], ["naloxone", "opioid 과다복용"], ["nystatin", "candida감염 치료"], ["nitroglycerin", "협심증"], ["nifedipine", "고혈압"], ["dabigatran", "deep vein thrombosis, pulmonary embolism 치료"], ["daunorubicin", "AML(급성골수성백혈병), 신경아세포증"], ["dapagliflozin", "2형 당뇨병"], ["dexamethasone", "류마티스성관절염의 항염증제, 알러지반응"], ["donepezil", "치매(알츠하이머병)"], ["dobutamine", "심부전"], ["docetaxel", "유방암, 폐암,등"], ["dopamine", "심부전"], ["Doxazosin", "혈압약"], ["Doxorubicin", "(주로 유방암, Metastatic cancer)"], ["Doxycycline", "항균제"], ["Domperidone", "위장운동장애"], ["Digoxin", "심부전"], ["Diazepam", "불안증"], ["Diclofenac", "통증, 편두통"], ["Diltiazem", "고혈압"], ["Lamotrigine", "항경련제"], ["Lamivudine", "B형 간염, HIV 감염"], ["Ramipril", "고혈압약"], ["Lactulose", "변비"], ["Lansoprazole", "소화성 궤양 치료제"], ["Levenorgestrel", "피임약"], ["Levodopa/ Carbidopa", "파킨슨병 치료제"], ["levosulpiride", "위장운동 장애"], ["levothyroxine", "갑상선 기능 저하증"], ["levofloxacin", "각막염, 결막염 항균제"], ["levetiracetam", "간질 치료제"], ["letrozole", "유방암 항암제"], ["lorazepam", "마취전/ 급성 불안, 흥분에 사용"], ["losartan", "고혈압"], ["rosuvastatin", "고지혈증"], ["roxithromycin", "편도염, 기관지염 등 호흡기 감염증"], ["linagliptin", "당뇨병 치료제"], ["rivaroxaban", "정맥혈전증, 폐색전증 치료"], ["ribavirin", "만성 C형 간염 치료제"], ["risperidone", "정신분열증, 우울, 불안 완화"], ["rituximab", "림프종, 만성구성 백혈병, 류마티스 관절염 치료제"], ["lithium", "조울증"], ["rifampicin", "항결핵제"], ["Megestrol", "암.AIDS의한 식욕부진(식욕촉진제), 재발성, 전이성, 수술불가 유방암, 자궁내막암 완화"], ["Meropenem", "(폐혈증, 호흡기감염, 요로감염증, 복막염 등의) 항균제"], ["Methylprednisolone", "습진, 아토피피부염"], ["Metoclopramide", "진토제"], ["Methotrexate", "급성백혈병, 비호지킨림프종 등 항암제"], ["Metronidazole", "(패혈증, 균혈증 등) 혐기성 감염증 항균제, (세균질염 등) 항진균제"], ["Metformin", "당뇨병 (경구용 혈당강하제)"], ["Methimazole", "갑상선항진증"], ["Methylphenidate", "ADHD (주의력결핍과잉행동장애)"], ["Mefenamic acid", "진통제(두통, 치통, 요통, 골관절염, 월경통 등)"], ["Immunoglobulin", "저 및 무감마글로불린혈증, 중증감염증(항생물질병용)"], ["Morphine", "마약성 진통제"], ["Moxifloxacin", "호흡기감염(급성부비동염, 폐렴), 합병 복강내 감염 항균제"], ["Montelukast", "천식, 알레르기비염"], ["Midazolam", "수면장애, 진정 목적"], ["Mycophenolate", "이식환자 급성장기 '이식거부반응 방지'"], ["Baclofen", "근육이완제"], ["Vancomycin", "항균제 (위막성장염, PMC)"], ["Valsartan", "고혈압제"], ["Valproic acid", "항경련제"], ["Verapamil", "고혈압, 협심증 치료제"], ["Betamethasone", "항염증제, 아토피성/접촉성 피부염"], ["Budesonide", "천식, 크론병, 궤양성 대장염"], ["Bicalutamide", "항암제"], ["Cyclosporine", "장기이식거부반응, 류마티스 관절염"], ["Salmeterol", "천식, COPD"], ["Salbutamol", "천식, COPD"], ["Sulfasalazine", "염증성 장질환, 류마티스 관절염"], ["Celecoxib", "소염진통제"], ["Cefazolin", "담즙관염의 항균제"], ["Cefaclor", "호흡기 감염, 위장관 감염의 항균제"], ["Cefepime", "복부내 감염, 폐렴의 항균제"], ["Cefotaxime", "뇌수막염, 호흡기 감염, 방광염, 위장관 감염"], ["Cefuroxime", "방광염"], ["Ceftriaxone", "뇌수막염, 호흡기 감염, 방광염, 위장관 감염"], ["Sumatriptan", "편두통 치료제"], ["Sucralfate", "소화성 궤양 치료제"], ["Pseudoephedrine", "코감기"], ["Streptokinase- streptodornase", "수술 및 외상 후 염증 완화, 부비동염, 혈정정맥염"], ["Spironolactone", "고혈압"], ["Cimetidine", "소화성궤양치료제"], ["Cisplatin", "위암, 폐암, 고환/전립선/난소/방광/자궁경부암"], ["Cyclophosphamide", "유방암"], ["Ciprofloxacin", "호흡기 감염, 위장관 감염, 방광염"], ["Sildenafil", "발기부전 치료제"], ["Simvastatin", "고지혈증 치료제"], ["Amantadine", "파킨슨병 치료제"], ["Amoxicillin", "생식기감염, 폐렴"], ["Amiodarone", "부정맥치료제"], ["Amikacin sulfate", "폐렴, 폐혈증, 복막염, 수막염, 요로감염 등 감염질환"], ["Amitriptyline", "우울증 치료제, 야뇨증"], ["Aceclofenac", "관절염, 척추염, 수술 후 통증, 요통 등"], ["Acyclovir", "생식기포진, 대상포진, 단순포진성 뇌염"], ["Azathioprine", "장기이식 후 감염예방, 자가면역질환"], ["Azithromycin", "호흡기감염, 중이염, 피부감염, 생식기감염"], ["Acarbose", "당뇨약"], ["Atenolol", "고혈압"], ["Atrovastatin", "고지혈증"], ["Atropine", "해독제, 진경제, 산동약"], ["Afloqualone", "마비, 다발성경화증 치료제"], ["Alendronate", "골다공증치료제"], ["Allopurinol", "통풍치료제"], ["Alverine", "과민성대장증후군 치료제"], ["Albumin", "저단백혈증, 혈액대용제 및 혈장단백질 분획제"], ["Alfuzosin", "전립선 비대증 치료제, 배뇨장애 치료제"], ["Alprazolam", "항불안제, 우울증, 수면장애, 공황장애 (수면진통제, 신경안정제)"], ["Amlodipine", "고혈압"], ["Amphotericin B", "심각한 진균증, 리슈만편모충증"], ["Ampicillin", "호흡기 감염증, UTI(요로기관감염증), 뇌수막염"], ["Enalapril", "고혈압"], ["Enoxaparin", "DVT(deep vein thrombosis), PE(pulmonary embolism)"], ["Erythropoietin", "빈혈치료제"], ["Ebastine", "비염, 알레르기"], ["Esomeprazole", "소화성궤양치료제"], ["Escitalopram", "항우울제"], ["Ethambutol", "항결핵제"], ["Epinephrine", "알러지성 과민반응, 저혈압/쇼크"], ["Entacapone", "파킨슨병 치료제"], ["Entecavir", "B형 간염"], ["Omeprazole", "소화성궤양 치료제"], ["Oxybutynin", "과민성 방광 치료제"], ["Oxycodone", "마약성 진통제"], ["Oxytocin", "자궁수축제 (자궁 수축 유발, 자궁 출혈 치료)"], ["Octreotide", "말단비대증 치료"], ["Ondansetron", "진토제(구토 예방 및 치료)"], ["Olanzapine", "비정형 항정신병약 (정신분열병, 양극성장애)"], ["Warfarin", "정맥혈전증, 색전성 심방세동, 폐동맥색전증, 관상동맥페색"], ["Imatinib", "표적치료 항암제 (만성골수성백혈병=CML)"], ["Imipenem / cilastatin", "기관지염, 폐렴, 방광염, 담낭염, 자궁내감염, 패혈증 등"], ["Isoniazide", "결핵"], ["Isosorbide 5-mononitrate", "관상동맥심질환, 협심증의 흉통, 심근경색, 만성심근기능부전"], ["Isosorbide dinitrate", "급성 심부전, 불안정형 협심증"], ["Isotretinoin", "여드름 치료제"], ["Acitretin", "건선 치료제"], ["Itraconazole", "칸디다성 질염, 피부사상균증, 진균성 각막염, 구강 칸디다증"], ["Ifosfamide", "항암제"], ["Ipratropium", "기도폐쇄 장애에 의한 호흡곤란 증상 완화"], ["Insulin", "당뇨병약"], ["Zolpidem", "수면제"], ["carbamazepine", "(간질, 삼차 신경통의) 항경련제"], ["carvedilol", "고혈압, 협심증 치료제"], ["carboplatin", "(주로 난소암, 소세포폐암의) 항암제"], ["capecitabine", "(주로 결장직장암, 유방암, 위암의) 항암제"], ["calcitriole", "(경구, 주사제-신기능 저하 환자의 골질환치료, 부갑상선 기능이상 치료) (외용제-건선 치료제) 비타민D제제"], ["captopril", "고혈압"], ["ketorolac", "진통제"], ["codeine", "마약성 진통제, 진해제"], ["colchicine", "통풍 치료제"], ["quetiapine", "(정신분열증의) 비정형 항정신병약"], ["clarithromycin", "(상하기도감염, 피부감염 등의) 항균제"], ["clonazepam", "(간질의) 항경련제, BZD계 수면진통제 및 신경안정제"], ["clozapine", "(정신분열증의) 비정형 항정신병약"], ["clopidogrel", "항혈전제, 혈소판응집억제제"], ["clindamycin", "항균제"], ["tamoxifen", "(유방암의) 호르몬성 항암제"], ["tacrolimus", "(장기이식거부반응) 면역억제제"], ["tamsulosin", "양성 전립선 비대증"], ["theophylline", "기관지 확장제"], ["tobramycin", "항균제"], ["tramadol", "중추성 진통제"], ["trastuzumab", "표적치료 항암제"], ["tiotropium", "기관지 확장제"], ["ticagrelor", "심근경색, 뇌졸중, 혈소판응집억제제"], ["paroxetine", "항우울, 항불안제"], ["famotidine", "소화성궤양치료제"], ["paclitaxel", "항암제"], ["pantoprazole", "소화성궤양치료제"], ["phenobarbital", "항경련제"], ["phenytoin", "항경련제"], ["pethidine", "마약성 진통제"], ["fentanyl", "마약성 진통제, 전신마취제"], ["formoterol", "기관지 확장제"], ["furosemide", "고혈압약"], ["prasugrel", "(불안정형 협심증 환자, STEMI환자의 항혈전제) 혈소판응집억제제"], ["pregabalin", "부분 발작 보조제"], ["prednisolone", "항염증제, 면역억제제"], ["propofol", "정맥 마취제"], ["propranolol", "고혈압, 협심증, 부정맥 치료제"], ["flumazenil", "벤조다이아제핀계 약물의 중추진정작용 역전"], ["fluorometholone", "항염증제"], ["fluorouracil", "세포독성 항암제"], ["fluoxetine", "우울증, 월경전 불쾌장애"], ["fluconazole", "항진균제"], ["finasteride", "양성 전립선 비대증, 탈모치료제"], ["pyrazinamide", "항결핵제"], ["piperacillin/tazobactam", "(폐렴, 복막염 등의) 항균제"], ["pioglitazone", "당뇨병약"], ["hydroxyzine", "알러지약"], ["heparin", "폐색전증, 심부정맥 혈전증(DVT) 등에 쓰이는 항응고제"], ["hydrochlorothiazide", "고혈압약"]
     ];
 
-    // 3. 기타 데이터 세트 정의
+    // 4. 기타 데이터 세트 정의
     const set_2024_re = [
         ["loratadine", "알레르기성 비염, 두드레기"], ["ivabradine", "협심증,만성 심부전에서 심박수 감소용"], ["etarnercept", "류마티스 관절염, 강직척추염"], ["fluticasone", "천식,알레르기 비염, 만성폐쇄성폐질환(COPD)"], ["tiotropium", "만성폐쇄성폐질환(COPD), 천식"], ["escitalopram", "주요우울장애, 범불안장애, 강박장애"], ["levothyroxine", "갑상선기능저하증"], ["liraglutade", "제2형 당뇨병"], ["diclofenac", "류마티스 관절염, 근골격계 통증"], ["cholecalciferol", "비타민 D 결핍, 골다공증 예방 및 치료"], ["ambroxol", "거담제로 기관지염, 천식"], ["bisacodyl", "변비"], ["ribaroxaban", "심부정맥혈전증(DVT), 폐색전증(PE), 심방세동의 뇌졸중예방"], ["furosemide", "심부전,고혈압"], ["sevelamer", "만성신부전 환자의 고인산혈증 조절"], ["azythromycin", "세균성감염(호흡기, 피부, 생식기), 클라미디아감염"], ["amphotericin b", "전신성 진균감염(칸디다증)"], ["tacrolimus", "장기이식 후 거부반응 억제, 아토피피부염"], ["famciclovir", "생식기 헤르페스 감염, 대상포진"], ["risendronate", "골다공증 치료 및 예방"], ["varenicline", "금연 보조요법(니코틴 의존성 치료)"], ["lamotrigine", "간질,양극성장애(조증예방)"], ["allopurinol", "통풍,고요산혈증"], ["oxycodone", "마약성 진통제로 중등도 – 중증 통증 완화"], ["darbopetin", "만성신부전, 빈혈치료(적혈구 생선촉진제)"]
     ];
@@ -455,54 +811,7 @@
         ["Valsartan", "고혈압, 심부전"], ["Clopidogrel", "심근경색, 뇌졸중, 관상동맥질환등 혈전 색전 예방"], ["Metformin", "당뇨병"], ["Isotretionin", "여드름"], ["Alendronate", "골다공증 치료제"], ["Salmeterol", "천식, COPD - LABA"], ["Pseudoephedrine", "코막힘, 비충혈완화"], ["Lactulose", "변비"], ["Almagate", "위산과다, 위 십이지장 궤양, 위염"], ["Simethicone", "복부팽만, 가스제거"], ["Nystatin", "구강 장 피부 칸디다증"], ["Albendazole", "회충 요충 촌충 등 기생충 감염"], ["Finasteride", "전립선비대증, 남성형 탈모"], ["Mupirocin", "피부세균감염"], ["Loperamide", "급성 만성 설사증상 완화"], ["Valproate", "간질, 양극성 장애의 조절 조증"], ["Guaifenasin", "가래 - 거담제"], ["Glimepiride", "당뇨"], ["Baclofen", "척수성 다발성경하증"], ["Cefaclor", "호흡기, 요로, 피부 등 세균감염"], ["Ethambutol", "결핵치료"], ["Itraconazole", "피부, 손발톱진균증 진균감염"], ["Losartan", "고혈압, 심부전"], ["Bromhexine", "기관지염, 가래 배출"]
     ];
 
-    // 새롭게 추가된 '다빈도 의약품 전체 정리 (261009)' 데이터 세트
-    const set_261009 = [
-        ["Almagate", "위산과다, 위·십이지장궤양, 위염"],
-        ["Nintedanib", "특발성 폐섬유증, 전신경화증 연관 간질성폐질환"],
-        ["Pantoprazole", "위식도역류질환(GERD), 소화성궤양, 졸링거-엘리슨 증후군"],
-        ["Desloratadine", "알레르기성 비염, 만성 특발성 두드러기"],
-        ["Allopurinol", "통풍, 고요산혈증"],
-        ["Salbutamol", "천식, 만성폐쇄성폐질환(COPD)의 호흡곤란 완화"],
-        ["Amlodipine", "고혈압, 관상동맥질환(협심증)"],
-        ["Valsartan", "고혈압, 심부전, 심근경색 후 생존율 향상"],
-        ["Losartan", "고혈압, 제2형 당뇨병성 신증"],
-        ["Cimetidine", "위·십이지장궤양, 역류성식도염"],
-        ["Glimepiride", "제2형 당뇨병"],
-        ["Dapagliflozin", "제2형 당뇨병, 심부전, 만성콩팥병"],
-        ["Cholecalciferol", "비타민 D 결핍, 골다공증 예방 및 치료"],
-        ["Indacaterol", "만성폐쇄성폐질환(COPD)의 유지요법 기관지확장제"],
-        ["Clopidogrel", "동맥경화성 혈전증(심근경색, 뇌졸중) 예방"],
-        ["Amiodarone", "심실성 및 심방성 부정맥 치료"],
-        ["Ivabradine", "만성 안정형 협심증, 만성 심부전"],
-        ["Cisplatin", "위암, 폐암, 난소암, 고환암 등 고형암 항암제"],
-        ["Levothyroxine", "갑상선 기능 저하증"],
-        ["Methimazole", "갑상선 기능 항진증(그레이브스병)"],
-        ["Cefaclor", "호흡기 감염증, 요로 감염증, 피부 감염증 항균제"],
-        ["Caspofungin", "침습성 칸디다증, 아스페르길루스증 등 항진균제"],
-        ["Cefotaxime", "패혈증, 뇌수막염, 복강내 감염 항균제"],
-        ["Ceftriaxone", "수막염, 폐렴, 요로감염 등 중증 세균 감염 항균제"],
-        ["Cefuroxime", "호흡기 감염, 요로 감염 항균제"],
-        ["Tacrolimus", "장기이식(신장·간장) 거부반응 억제, 아토피피부염"],
-        ["Tamoxifen", "유방암 치료 및 재발 예방"],
-        ["Sulindac", "류마티스 관절염, 골관절염, 강직척추염 (NSAID)"],
-        ["Ketoprofen", "관절염, 근육통, 외상 후 소염진통"],
-        ["Ibandronate", "폐경기 여성의 골다공증 치료 및 예방"],
-        ["Fentanyl", "중증 만성 통증 조절 (마약성 진통제)"],
-        ["Ketamine", "전신마취 유도 및 유지, 진통 보조"],
-        ["Gabapentin", "신경병증성 통증, 부분발작 보조치료"],
-        ["Carbamazepine", "뇌전증(간질), 삼차신경통, 양극성장애"],
-        ["Lamotrigine", "뇌전증 발작, 양극성장애(조증 삽화 지연)"],
-        ["Topiramate", "뇌전증 치료, 편두통 예방"],
-        ["Sevelamer", "만성신부전 환자의 고인산혈증 혈중 인 조절"],
-        ["Donepezil", "알츠하이머병으로 인한 치매 증상 완화"],
-        ["Pseudoephedrine", "코막힘, 비충혈 완화"],
-        ["Fluticasone", "천식, 알레르기 비염, 만성폐쇄성폐질환(COPD)"],
-        ["Tiotropium", "만성폐쇄성폐질환(COPD) 및 천식의 유지요법"],
-        ["Latanoprost", "개방각 녹내장, 고안압증 치료"],
-        ["Etanercept", "류마티스 관절염, 강직척추염, 건선성 관절염"]
-    ];
-
-    // 4. 데이터를 서술형 퀴즈 포맷으로 변환하는 공통 함수
+    // 5. 데이터를 서술형 퀴즈 포맷으로 변환하는 공통 함수
     function formatQuizData(dataArray, guidelineTitle) {
         return dataArray.map((item, index) => {
             return {
@@ -515,12 +824,12 @@
         });
     }
 
-    // 5. 전체 퀴즈 라이브러리 구성 (기존 모든 퀴즈 유지 + '다빈도 의약품 전체 정리 (261009)' 추가)
+    // 6. 전체 퀴즈 라이브러리 구성 ('2025 기초약무실습 중간'이 '2024 기초약무실습 중간' 바로 앞에 위치)
     const quizLibrary = [
         {
-            id: 'quiz_261009',
-            title: '다빈도 의약품 전체 정리 (261009)',
-            data: formatQuizData(set_261009, "다빈도 의약품 전체 정리 (261009)")
+            id: 'quiz_2025_mid',
+            title: '2025 기초약무실습 중간',
+            data: mid2025QuizData
         },
         {
             id: 'quiz_2024_mid',
