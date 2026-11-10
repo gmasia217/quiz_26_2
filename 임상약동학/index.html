@@ -168,6 +168,232 @@
 </div>
 
 <script>
+    // 새로 추가된 '2025 임상약동학 5-2 Vancomycin 퀴즈' (20문항)
+    const vancomycinQuizData = [
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "1. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: Which statement regarding \"Strength of Recommendation\" is true?",
+            options: [
+                "A: Refers to poor evidence to support a recommendation for or against use.",
+                "B: Refers to moderate evidence to support a recommendation for or against use.",
+                "C: Refers to good evidence to support a recommendation."
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "2. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: Which statement regarding \"Quality of Evidence II\" is true?",
+            options: [
+                "Refers to evidence from 1 or more properly randomized controlled trials.",
+                "Refers to evidence from cohort or case-controlled analytic studies.",
+                "Refers to evidence from opinions of respected authorities, based on clinical experience, descriptive studies, or reports of expert committees."
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "3. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: In patients with suspected or definitive serious MRSA infections, what AUC/MICBMD ratio range is advocated for achieving clinical efficacy and improving patient safety?",
+            options: [
+                "200 to 300",
+                "400 to 600",
+                "800 to 1000",
+                "1000 to 1200"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "4. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: What should clinicians target for patients with suspected or documented serious infections due to MRSA when transitioning to AUC/MIC monitoring?",
+            options: [
+                "Trough levels between 10 and 15 mg/L",
+                "Continuous infusion without monitoring",
+                "Random peak levels above 25 mg/L",
+                "AUC assuming vancomycin MICBMD of 1 mg/L or less"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "5. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: Why is trough-only monitoring no longer recommended in patients with serious MRSA infections?",
+            options: [
+                "Based on efficacy and nephrotoxicity data",
+                "Lack of clinical evidence",
+                "Due to bacterial resistance",
+                "Unreliable lab tests"
+            ],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "6. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: When is vancomycin monitoring recommended besides serious MRSA infections?",
+            options: [
+                "Patients at high risk of nephrotoxicity",
+                "Patients with stable renal function",
+                "Patients receiving less than 3 days of therapy",
+                "1, 2",
+                "2, 3",
+                "1, 3",
+                "1, 2, 3"
+            ],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "7. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: What should be assumed for empiric dosing based on current national vancomycin susceptibility surveillance data?",
+            options: [
+                "Vancomycin MIC of 0.5 mg/L",
+                "Vancomycin MIC of 1 mg/L",
+                "Vancomycin MIC of 2 mg/L",
+                "Vancomycin MIC of 3 mg/L"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "8. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: In what scenario might continuous infusion be a reasonable alternative to conventional intermittent infusion dosing?",
+            options: [
+                "In outpatient settings",
+                "For all MRSA infections",
+                "When the AUC target cannot be achieved",
+                "When the patient is allergic to vancomycin"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "9. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: When considering vancomycin for continuous infusion in the ICU and facing incompatibility issues with other commonly coadministered drugs, what is the recommended approach to manage this situation?",
+            options: [
+                "Utilize independent lines or multiple catheters",
+                "Mix vancomycin with other drugs in the same catheter",
+                "Use a single catheter for both vancomycin and other drugs",
+                "Alternate the administration of vancomycin and other drugs"
+            ],
+            answer: 0
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "10. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: What is the recommended and optimal way to manage vancomycin dosing?",
+            options: [
+                "Based on peak concentrations only",
+                "Solely relying on trough concentrations",
+                "Through AUC-guided dosing and monitoring",
+                "Adjusting doses based on patient symptoms"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "11. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: What is the preferred approach to estimate the Area Under the Curve (AUC) for vancomycin optimization using Bayesian software programs?",
+            options: [
+                "Collection of 1 vancomycin concentration, preferably postinfusion",
+                "Collection of 2 vancomycin concentrations, including at least 1 trough",
+                "Collection of 3 vancomycin concentrations, preferably at peak time",
+                "Collection of 4 vancomycin concentrations at any time during dosing"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "12. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: What dosing regimen is recommended for most patients with normal renal function assuming MICBMD of 1 mg/L?",
+            options: [
+                "10 to 15 mg/kg (based on ideal body weight) every 8-12 hours",
+                "10 to 15 mg/kg (based on actual body weight) every 8-12 hours",
+                "15 to 20 mg/kg (based on ideal body weight) every 8-12 hours",
+                "15 to 20 mg/kg (based on actual body weight) every 8-12 hours"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "13. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: What dosing regimen may be considered for critically ill patients to achieve target steady-state concentration?",
+            options: [
+                "A loading dose of 5 to 10 mg/kg, followed by daily maintenance CI of 10 to 20 mg/kg",
+                "A loading dose of 5 to 10 mg/kg, followed by daily maintenance CI of 20 to 30 mg/kg",
+                "A loading dose of 15 to 20 mg/kg, followed by daily maintenance CI of 20 to 30 mg/kg",
+                "A loading dose of 15 to 20 mg/kg, followed by daily maintenance CI of 30 to 40 mg/kg"
+            ],
+            answer: 3
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "14. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: When aiming for steady-state concentrations of 15 to 25 mg/L and trough levels of 10 to 20 mg/L, what is the comparative risk of developing nephrotoxicity between continuous infusion and intermittent dosing?",
+            options: [
+                "Continuous infusion poses a higher risk",
+                "Continuous infusion poses a similar risk",
+                "Continuous infusion poses a lower risk",
+                "1, 2",
+                "2, 3",
+                "1, 3",
+                "1, 2, 3"
+            ],
+            answer: 4
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "15. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: For critically ill patients with suspected or confirmed serious MRSA infections, which loading dose range can be considered for the intermittent administration of vancomycin to achieve rapid attainment of targeted concentrations?",
+            options: [
+                "5-10 mg/kg",
+                "15-20 mg/kg",
+                "20-35 mg/kg",
+                "40-50 mg/kg"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "16. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: What vancomycin loading dose is recommended for obese adult patients with serious infections?",
+            options: [
+                "5-10 mg/kg",
+                "10-15 mg/kg",
+                "20-25 mg/kg",
+                "30-35 mg/kg"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "17. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: What is the most practical approach for monitoring vancomycin in intermittent hemodialysis?",
+            options: [
+                "Daily serum concentration monitoring",
+                "Strictly weight-based recommendations",
+                "Predialysis serum concentration monitoring",
+                "Post-dialysis serum concentration monitoring"
+            ],
+            answer: 2
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "18. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: How should maintenance doses be administered in hybrid dialysis therapies regarding vancomycin?",
+            options: [
+                "Before the start of dialysis",
+                "After the dialysis treatment ends",
+                "During the initial 30 minutes of dialysis",
+                "Randomly throughout the dialysis session"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "19. According to the 2020 consensus guideline on therapeutic monitoring of vancomycin for serious MRSA infection: For patients undergoing Continuous Renal Replacement Therapy (CRRT) at conventional effluent rates, what is the recommended initial maintenance dosing of vancomycin?",
+            options: [
+                "5 to 7.5 mg/kg every 12 hours",
+                "7.5 to 10 mg/kg every 12 hours",
+                "10 to 15 mg/kg every 12 hours",
+                "15 to 20 mg/kg every 12 hours"
+            ],
+            answer: 1
+        },
+        {
+            guideline: "[2025 임상약동학 5-2 Vancomycin]",
+            text: "20. The 2020 Consensus Guideline on Therapeutic Monitoring of Vancomycin for Serious MRSA Infections included pharmacists as authors.",
+            options: [
+                "Yes",
+                "No"
+            ],
+            answer: 0
+        }
+    ];
+
     // 1. 2025 임상약동학 중간 퀴즈 (45문항)[cite: 30]
     const midQuizData = [
         {
@@ -812,8 +1038,13 @@
         }
     ];
 
-    // 퀴즈 라이브러리 목록 (모든 퀴즈 포함)
+    // 퀴즈 라이브러리 목록 (모든 기존 퀴즈 + 신규 Vancomycin 퀴즈 포함)
     const quizLibrary = [
+        {
+            id: 'pk_vancomycin_2025',
+            title: '2025 임상약동학 5-2 Vancomycin 퀴즈',
+            data: vancomycinQuizData
+        },
         {
             id: 'pk_mid_2025',
             title: '2025 임상약동학 중간 퀴즈 (45문항)',
